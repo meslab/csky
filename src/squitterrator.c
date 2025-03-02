@@ -1,12 +1,4 @@
-#include "../include/arg_parser.h"
-#include "../include/client.h"
-#include "../include/processor.h"
-#include "../include/ring_buffer.h"
-#include "../include/utils.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "../include/squitterrator.h"
 
 int main(int argc, char *argv[]) {
   Options opts;
