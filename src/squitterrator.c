@@ -1,4 +1,5 @@
 #include "../include/arg_parser.h"
+#include "../include/ring_buffer.h"
 
 #include <arpa/inet.h>
 #include <pthread.h>
@@ -8,59 +9,10 @@
 #include <string.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 10     // Number of stored lines
-#define MAX_LINE_LENGTH 64 // Max length of a single line
-
-typedef struct {
-  char buffer[BUFFER_SIZE]
-             [MAX_LINE_LENGTH + 1]; // Stores lines (extra byte for '\0')
-  int head;
-  int tail;
-  pthread_mutex_t mutex;
-  pthread_cond_t not_empty;
-  pthread_cond_t not_full;
-} ring_buffer_t;
-
 typedef struct {
   ring_buffer_t *rb;
   Options *opts;
 } ThreadArgs;
-
-// Initialize the ring buffer
-void init_ring_buffer(ring_buffer_t *rb) {
-  rb->head = 0;
-  rb->tail = 0;
-  pthread_mutex_init(&rb->mutex, NULL);
-  pthread_cond_init(&rb->not_empty, NULL);
-  pthread_cond_init(&rb->not_full, NULL);
-}
-
-// Insert a new line into the ring buffer
-void ring_buffer_insert(ring_buffer_t *rb, const char *line) {
-  pthread_mutex_lock(&rb->mutex);
-  while ((rb->head + 1) % BUFFER_SIZE == rb->tail) {
-    pthread_cond_wait(&rb->not_full, &rb->mutex); // Wait if buffer is full
-  }
-  strncpy(rb->buffer[rb->head], line, MAX_LINE_LENGTH);
-  rb->buffer[rb->head][MAX_LINE_LENGTH] = '\0'; // Ensure null termination
-  rb->head = (rb->head + 1) % BUFFER_SIZE;
-  pthread_cond_signal(&rb->not_empty); // Signal that buffer is not empty
-  pthread_mutex_unlock(&rb->mutex);
-}
-
-// Retrieve a line from the ring buffer
-int ring_buffer_get(ring_buffer_t *rb, char *line) {
-  pthread_mutex_lock(&rb->mutex);
-  while (rb->head == rb->tail) {
-    pthread_cond_wait(&rb->not_empty, &rb->mutex); // Wait if buffer is empty
-  }
-  strncpy(line, rb->buffer[rb->tail], MAX_LINE_LENGTH);
-  line[MAX_LINE_LENGTH] = '\0';
-  rb->tail = (rb->tail + 1) % BUFFER_SIZE;
-  pthread_cond_signal(&rb->not_full); // Signal that buffer is not full
-  pthread_mutex_unlock(&rb->mutex);
-  return 0;
-}
 
 // Convert a hex string to an array of uint32_t values
 void hex_to_uint32(const char *hex_str, uint32_t *arr, int *count) {
