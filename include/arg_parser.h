@@ -6,7 +6,7 @@
 
 typedef struct Options {
   char *tcp_server;
-  int16_t tcp_port;
+  uint16_t tcp_port;
   uint8_t verbose;
 } Options;
 

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -Wpedantic -fPIC
+CFLAGS = -Wall -Werror -Wextra -Wpedantic -fPIC -s
 CFLAGS_RELEASE = -O2 -flto
 CFLAGS_DEBUG = -g
 BIN_DIR = test/bin
