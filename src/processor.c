@@ -19,7 +19,7 @@ void *data_processor_thread(void *arg) {
         hex_to_uint32(line, processed_data, &count);
         printf("Processed data: ");
         for (int i = 0; i < count; i++) {
-          printf("%u ", processed_data[i]);
+          printf("%X ", processed_data[i]);
         }
         printf("\n");
       }
