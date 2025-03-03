@@ -1,13 +1,18 @@
 #include "../include/ads_b.h"
 
-// Convert a hex string to a uint8_t array
+/**
+ * Convert a hex string to a uint8_t array
+ */
 void hex_to_bytes(const char *hex_str, uint8_t *bytes, size_t len) {
   for (size_t i = 0; i < len; i++) {
     sscanf(hex_str + 2 * i, "%2hhx", &bytes[i]);
   }
 }
 
-// Function to process the ADS-B hex string
+/**
+ * Function to process the ADS-B hex string
+ * into adsb_ext_t or adsb_short_t
+ */
 void process_adsb(const char *hex_str) {
   size_t len = strlen(hex_str);
 

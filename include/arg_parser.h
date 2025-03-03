@@ -5,9 +5,12 @@
 #include <stdint.h>
 
 typedef struct Options {
-  char *tcp_server;
   uint16_t tcp_port;
   uint8_t verbose;
+  char *tcp_server;
+  char *log_level;
+  char *err_log;
+  char *out_log;
 } Options;
 
 void parse_arguments(int argc, char *argv[], Options *opt);
