@@ -6,7 +6,7 @@
 
 static FILE *err_log = NULL;
 static FILE *out_log = NULL;
-static LogLevel current_log_level = LOG_ERROR;
+static LogLevel current_log_level = LOG_INFO;
 
 const char *log_level_str(LogLevel level) {
   switch (level) {

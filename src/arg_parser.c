@@ -10,7 +10,7 @@ void parse_arguments(int argc, char *argv[], Options *opts) {
   opts->verbose = 0;
   opts->err_log = NULL;
   opts->out_log = NULL;
-  opts->log_level = "ERROR";
+  opts->log_level = "INFO";
 
   static struct option long_options[] = {
       {"tcp-server", optional_argument, 0, 't'},
@@ -34,6 +34,21 @@ void parse_arguments(int argc, char *argv[], Options *opts) {
     case 'p':
       if (optarg) {
         opts->tcp_port = atoi(optarg);
+      }
+      break;
+    case 'o':
+      if (optarg) {
+        opts->out_log = optarg;
+      }
+      break;
+    case 'e':
+      if (optarg) {
+        opts->err_log = optarg;
+      }
+      break;
+    case 'l':
+      if (optarg) {
+        opts->log_level = optarg;
       }
       break;
     case 'v':

@@ -4,6 +4,8 @@ int main(int argc, char *argv[]) {
   Options opts;
   parse_arguments(argc, argv, &opts);
 
+  init_logger(&opts);
+
   ring_buffer_t ring_buffer;
   init_ring_buffer(&ring_buffer);
 
