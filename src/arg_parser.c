@@ -10,7 +10,7 @@ void parse_arguments(int argc, char *argv[], Options *opts) {
   opts->verbose = 0;
   opts->err_log = NULL;
   opts->out_log = NULL;
-  opts->log_level = "INFO";
+  opts->log_level = "ERROR";
 
   static struct option long_options[] = {
       {"tcp-server", optional_argument, 0, 't'},

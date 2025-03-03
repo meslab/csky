@@ -19,5 +19,7 @@ int main(int argc, char *argv[]) {
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);
 
+  close_logger();
+
   return 0;
 }

@@ -6,7 +6,7 @@
 
 static FILE *err_log = NULL;
 static FILE *out_log = NULL;
-static LogLevel current_log_level = LOG_INFO;
+static LogLevel current_log_level = LOG_ERROR;
 
 const char *log_level_str(LogLevel level) {
   switch (level) {
@@ -16,10 +16,8 @@ const char *log_level_str(LogLevel level) {
     return "INFO";
   case LOG_WARNING:
     return "WARNING";
-  case LOG_ERROR:
-    return "ERROR";
   default:
-    return "UNKNOWN";
+    return "ERROR";
   }
 }
 
