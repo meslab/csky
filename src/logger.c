@@ -22,11 +22,11 @@ const char *log_level_str(LogLevel level) {
 }
 
 LogLevel parse_log_level(const char *level_str) {
-  if (strcmp(level_str, "DEBUG") == 0)
+  if (strcmp(level_str, "DEBUG") == 0 || strcmp(level_str, "D") == 0)
     return LOG_DEBUG;
-  if (strcmp(level_str, "INFO") == 0)
+  if (strcmp(level_str, "INFO") == 0 || strcmp(level_str, "I") == 0)
     return LOG_INFO;
-  if (strcmp(level_str, "WARNING") == 0)
+  if (strcmp(level_str, "WARNING") == 0 || strcmp(level_str, "W") == 0)
     return LOG_WARNING;
   return LOG_ERROR;
 }

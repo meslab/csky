@@ -1,4 +1,5 @@
 #include "../include/arg_parser.h"
+#include "../include/utils.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,6 +50,7 @@ void parse_arguments(int argc, char *argv[], Options *opts) {
     case 'l':
       if (optarg) {
         opts->log_level = optarg;
+        to_upper_case(opts->log_level);
       }
       break;
     case 'v':

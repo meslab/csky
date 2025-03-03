@@ -67,7 +67,7 @@ run_main_shared: main_shared
 	LD_LIBRARY_PATH=$(LIB_DIR) ./$(MAIN_SHARED_BIN)
 
 run_main_static: main_static
-	$(MAIN_STATIC_BIN)
+	$(MAIN_STATIC_BIN) $(LOG_LEVEL)
 
 # Clean build artifacts
 clean:
