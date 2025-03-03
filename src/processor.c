@@ -1,5 +1,6 @@
 #include "../include/processor.h"
 #include "../include/ads_b.h"
+#include "../include/logger.h"
 #include "../include/ring_buffer.h"
 #include "../include/utils.h"
 #include <stdint.h>
@@ -16,7 +17,7 @@ void *data_processor_thread(void *arg) {
     char line[MAX_LINE_LENGTH + 1];
     if (ring_buffer_get(rb, line) == 0) {
       strip_chars(line);
-      printf("%s\n", line);
+      log_info(line);
       process_adsb(line);
     }
   }

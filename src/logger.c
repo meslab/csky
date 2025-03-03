@@ -1,6 +1,37 @@
 #include "../include/logger.h"
 
+#include <stdio.h>
+#include <string.h>
 #include <time.h>
+
+static FILE *err_log = NULL;
+static FILE *out_log = NULL;
+static LogLevel current_log_level = LOG_ERROR;
+
+const char *log_level_str(LogLevel level) {
+  switch (level) {
+  case LOG_DEBUG:
+    return "DEBUG";
+  case LOG_INFO:
+    return "INFO";
+  case LOG_WARNING:
+    return "WARNING";
+  case LOG_ERROR:
+    return "ERROR";
+  default:
+    return "UNKNOWN";
+  }
+}
+
+LogLevel parse_log_level(const char *level_str) {
+  if (strcmp(level_str, "DEBUG") == 0)
+    return LOG_DEBUG;
+  if (strcmp(level_str, "INFO") == 0)
+    return LOG_INFO;
+  if (strcmp(level_str, "WARNING") == 0)
+    return LOG_WARNING;
+  return LOG_ERROR;
+}
 
 void log_message(LogLevel level, const char *message) {
   if (level < current_log_level)
@@ -52,4 +83,12 @@ int init_logger(const Options *opts) {
   }
 
   return 0; // Success
+}
+
+void close_logger() {
+  if (err_log)
+    fclose(err_log);
+  if (out_log)
+    fclose(out_log);
+  err_log = out_log = NULL;
 }
