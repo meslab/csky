@@ -32,10 +32,10 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  arena_info(logger, &arena);
-
   pthread_create(&processor_thread, NULL, data_processor_thread,
                  processor_args);
+
+  arena_info(logger, &arena);
 
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);

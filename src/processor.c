@@ -37,7 +37,10 @@ void *data_processor_thread(void *arg) {
     if (ring_buffer_get(rb, line) == 0) {
       strip_chars(line);
       log_info(logger, line);
-      log_info_formatted(logger, "Head: %d, tail: %d\n", rb->head, rb->tail);
+      log_debug_formatted(
+          logger, "Head: %2d, tail: %2d, entries: %2d\n", rb->head, rb->tail,
+          rb->head < rb->tail ? rb->head - rb->tail + BUFFER_SIZE
+                              : rb->head - rb->tail);
       process_adsb(line);
     }
   }

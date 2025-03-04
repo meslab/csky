@@ -25,5 +25,6 @@ void log_warning(Logger *logger, const char *message);
 void log_debug(Logger *logger, const char *message);
 
 void log_info_formatted(Logger *logger, const char *format, ...);
+void log_debug_formatted(Logger *logger, const char *format, ...);
 
 #endif // LOGGER_H
