@@ -11,6 +11,10 @@ typedef struct {
   Logger *logger;
 } ProcessorArgs;
 
+int8_t init_data_processor_args(ProcessorArgs *data_processor_args,
+                                ring_buffer_t *ring_buffer, Options *opts,
+                                Logger *logger);
+
 void *data_processor_thread(void *arg);
 void strip_chars(char *str);
 

@@ -31,6 +31,7 @@ void arena_free(MemoryArena *arena) {
   arena->offset = 0;
 }
 
-void arena_debug(MemoryArena *arena) {
-  printf("Arena size: %ld, offset: %ld\n", arena->size, arena->offset);
+void arena_info(Logger *logger, MemoryArena *arena) {
+  log_info_formatted(logger, "Arena size: %ld, offset: %ld\n", arena->size,
+                     arena->offset);
 }

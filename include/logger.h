@@ -17,7 +17,7 @@ typedef struct {
 int init_logger(Logger *logger, const Options *opts);
 void close_logger(Logger *Logger);
 
-void log_message(Logger *logger, LogLevel level, const char *message);
+void log_message(Logger *logger, const LogLevel level, const char *message);
 
 void log_error(Logger *logger, const char *message);
 void log_info(Logger *logger, const char *message);
@@ -25,5 +25,6 @@ void log_warning(Logger *logger, const char *message);
 void log_debug(Logger *logger, const char *message);
 
 void log_info_formatted(Logger *logger, const char *format, ...);
+void log_debug_formatted(Logger *logger, const char *format, ...);
 
 #endif // LOGGER_H

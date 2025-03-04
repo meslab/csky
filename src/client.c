@@ -7,6 +7,22 @@
 #include <unistd.h>
 
 /**
+ * Init TcpClientArgs
+ */
+inline int8_t init_tcp_client_args(TcpClientArgs *tcp_client_args,
+                                   ring_buffer_t *ring_buffer, Options *opts,
+                                   Logger *logger) {
+  if (!tcp_client_args) {
+    return -1;
+  }
+  tcp_client_args->rb = ring_buffer;
+  tcp_client_args->opts = opts;
+  tcp_client_args->logger = logger;
+
+  return 0;
+}
+
+/**
  * TCP client thread: Connects to server, reads data, and stores in ring buffer
  */
 void *tcp_client_thread(void *arg) {
@@ -41,6 +57,14 @@ void *tcp_client_thread(void *arg) {
   log_info_formatted(logger, "Connected to server %s:%d\n", opts->tcp_server,
                      opts->tcp_port);
 
+  read_lines(sockfd, rb);
+
+  log_info(logger, "Server disconnected.");
+  close(sockfd);
+  return NULL;
+}
+
+void read_lines(int sockfd, ring_buffer_t *rb) {
   char buffer[1024];              // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
   int line_pos = 0;
@@ -65,8 +89,4 @@ void *tcp_client_thread(void *arg) {
       }
     }
   }
-
-  log_info(logger, "Server disconnected.");
-  close(sockfd);
-  return NULL;
 }

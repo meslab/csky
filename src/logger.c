@@ -28,7 +28,7 @@ LogLevel parse_log_level(const char *level_str) {
   return LOG_ERROR;
 }
 
-void log_message(Logger *logger, LogLevel level, const char *message) {
+void log_message(Logger *logger, const LogLevel level, const char *message) {
   if (level < logger->level)
     return;
 
@@ -110,4 +110,17 @@ void log_info_formatted(Logger *logger, const char *format, ...) {
   va_end(args);
 
   log_message(logger, LOG_INFO, log_buffer);
+}
+
+void log_debug_formatted(Logger *logger, const char *format, ...) {
+  if (LOG_DEBUG < logger->level)
+    return;
+
+  char log_buffer[LOG_MESSAGE_MAX_LENGTH];
+  va_list args;
+  va_start(args, format);
+  vsnprintf(log_buffer, LOG_MESSAGE_MAX_LENGTH, format, args);
+  va_end(args);
+
+  log_message(logger, LOG_DEBUG, log_buffer);
 }

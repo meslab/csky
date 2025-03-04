@@ -17,19 +17,25 @@ int main(int argc, char *argv[]) {
 
   TcpClientArgs *tcp_client_args =
       (TcpClientArgs *)arena_alloc(&arena, sizeof(TcpClientArgs));
-  tcp_client_args->rb = ring_buffer;
-  tcp_client_args->opts = &opts;
-  tcp_client_args->logger = logger;
+
+  if (init_tcp_client_args(tcp_client_args, ring_buffer, &opts, logger)) {
+    log_error(logger, "TcpClientArgs init failed.");
+    return -1;
+  }
+  pthread_create(&client_thread, NULL, tcp_client_thread, tcp_client_args);
 
   ProcessorArgs *processor_args =
       (ProcessorArgs *)arena_alloc(&arena, sizeof(ProcessorArgs));
-  processor_args->rb = ring_buffer;
-  processor_args->opts = &opts;
-  processor_args->logger = logger;
 
-  pthread_create(&client_thread, NULL, tcp_client_thread, tcp_client_args);
+  if (init_data_processor_args(processor_args, ring_buffer, &opts, logger)) {
+    log_error(logger, "ProcessorArgs init failed.");
+    return -1;
+  }
+
   pthread_create(&processor_thread, NULL, data_processor_thread,
                  processor_args);
+
+  arena_info(logger, &arena);
 
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);
