@@ -41,7 +41,7 @@ void *tcp_client_thread(void *arg) {
   log_info_formatted(logger, "Connected to server %s:%d\n", opts->tcp_server,
                      opts->tcp_port);
 
-  char buffer[128];               // Temporary buffer
+  char buffer[1024];              // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
   int line_pos = 0;
 
@@ -66,7 +66,7 @@ void *tcp_client_thread(void *arg) {
     }
   }
 
-  printf("Server disconnected.\n");
+  log_info(logger, "Server disconnected.");
   close(sockfd);
   return NULL;
 }
