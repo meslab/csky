@@ -2,11 +2,13 @@
 #define PROCESSOR_H
 
 #include "../include/arg_parser.h"
+#include "../include/logger.h"
 #include "../include/ring_buffer.h"
 
 typedef struct {
   ring_buffer_t *rb;
   Options *opts;
+  Logger *logger;
 } ProcessorArgs;
 
 void *data_processor_thread(void *arg);

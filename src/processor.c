@@ -15,12 +15,13 @@ void *data_processor_thread(void *arg) {
 
   // Options *opts = args->opts;
   ring_buffer_t *rb = args->rb;
+  Logger *logger = args->logger;
 
   while (1) {
     char line[MAX_LINE_LENGTH + 1];
     if (ring_buffer_get(rb, line) == 0) {
       strip_chars(line);
-      log_info(line);
+      log_info(logger, line);
       process_adsb(line);
     }
   }
