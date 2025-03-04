@@ -5,7 +5,6 @@ int main(int argc, char *argv[]) {
   parse_arguments(argc, argv, &opts);
 
   Logger logger;
-
   init_logger(&logger, &opts);
 
   ring_buffer_t ring_buffer;
