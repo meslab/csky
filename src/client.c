@@ -12,12 +12,13 @@ void *tcp_client_thread(void *arg) {
 
   Options *opts = args->opts;
   ring_buffer_t *rb = args->rb;
+  Logger *logger = args->logger;
 
   int sockfd;
   struct sockaddr_in server_addr;
 
   if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    log_error("Socket creation failed");
+    log_error(logger, "Socket creation failed");
     exit(EXIT_FAILURE);
   }
 
@@ -26,20 +27,20 @@ void *tcp_client_thread(void *arg) {
   server_addr.sin_port = htons(opts->tcp_port);
   inet_pton(AF_INET, opts->tcp_server, &server_addr.sin_addr);
 
-  log_info_formatted("Connecting to server %s:%d\n",
-           opts->tcp_server, opts->tcp_port);
+  log_info_formatted(logger, "Connecting to server %s:%d\n", opts->tcp_server,
+                     opts->tcp_port);
 
   // Connect to server
   if (connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) ==
       -1) {
-    log_error("Connection failed");
+    log_error(logger, "Connection failed");
     close(sockfd);
     exit(EXIT_FAILURE);
   }
 
-  //snprintf(log_message, LOG_MESAGE_MAX_LENGTH, "Connected to server %s:%d\n",
-  //         opts->tcp_server, opts->tcp_port);
-  //log_info(log_message);
+  // snprintf(log_message, LOG_MESAGE_MAX_LENGTH, "Connected to server %s:%d\n",
+  //          opts->tcp_server, opts->tcp_port);
+  // log_info(log_message);
 
   char buffer[128];               // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line

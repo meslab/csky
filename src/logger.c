@@ -5,10 +5,6 @@
 #include <string.h>
 #include <time.h>
 
-static FILE *err_log = NULL;
-static FILE *out_log = NULL;
-static LogLevel current_log_level = LOG_ERROR;
-
 const char *log_level_str(LogLevel level) {
   switch (level) {
   case LOG_DEBUG:
@@ -32,12 +28,13 @@ LogLevel parse_log_level(const char *level_str) {
   return LOG_ERROR;
 }
 
-void log_message(LogLevel level, const char *message) {
-  if (level < current_log_level)
+void log_message(Logger *logger, LogLevel level, const char *message) {
+  if (level < logger->level)
     return;
 
-  FILE *dest = (level == LOG_ERROR) ? (err_log ? err_log : stderr)
-                                    : (out_log ? out_log : stdout);
+  FILE *dest = (level == LOG_ERROR)
+                   ? (logger->err_log ? logger->err_log : stderr)
+                   : (logger->out_log ? logger->out_log : stdout);
 
   time_t now = time(NULL);
   struct tm *tm_info = localtime(&now);
@@ -48,29 +45,28 @@ void log_message(LogLevel level, const char *message) {
   fflush(dest);
 }
 
-int init_logger(const Options *opts) {
+int init_logger(Logger *logger, const Options *opts) {
   if (!opts)
     return -1; // Ensure opts is valid
 
   // Set the log level
-  current_log_level =
-      parse_log_level(opts->log_level ? opts->log_level : "ERROR");
+  logger->level = parse_log_level(opts->log_level ? opts->log_level : "ERROR");
 
   // Open log files if paths are provided
   if (opts->err_log) {
-    err_log = fopen(opts->err_log, "a");
-    if (!err_log) {
+    logger->err_log = fopen(opts->err_log, "a");
+    if (!logger->err_log) {
       perror("Failed to open error log file");
       return -1;
     }
   }
 
   if (opts->out_log) {
-    out_log = fopen(opts->out_log, "a");
-    if (!out_log) {
+    logger->err_log = fopen(opts->out_log, "a");
+    if (!logger->out_log) {
       perror("Failed to open output log file");
-      if (err_log)
-        fclose(err_log);
+      if (logger->err_log)
+        fclose(logger->err_log);
       return -1;
     }
   }
@@ -78,25 +74,36 @@ int init_logger(const Options *opts) {
   return 0; // Success
 }
 
-void close_logger() {
-  if (err_log)
-    fclose(err_log);
-  if (out_log)
-    fclose(out_log);
-  err_log = out_log = NULL;
+void close_logger(Logger *logger) {
+  if (logger->err_log)
+    fclose(logger->err_log);
+  if (logger->out_log)
+    fclose(logger->out_log);
+  logger->err_log = logger->out_log = NULL;
 }
 
-void log_error(const char *message) { log_message(LOG_ERROR, message); }
-void log_info(const char *message) { log_message(LOG_INFO, message); }
-void log_warning(const char *message) { log_message(LOG_WARNING, message); }
-void log_debug(const char *message) { log_message(LOG_DEBUG, message); }
+void log_error(Logger *logger, const char *message) {
+  log_message(logger, LOG_ERROR, message);
+}
+void log_info(Logger *logger, const char *message) {
+  log_message(logger, LOG_INFO, message);
+}
+void log_warning(Logger *logger, const char *message) {
+  log_message(logger, LOG_WARNING, message);
+}
+void log_debug(Logger *logger, const char *message) {
+  log_message(logger, LOG_DEBUG, message);
+}
 
-void log_info_formatted(const char *format, ...) {
+void log_info_formatted(Logger *logger, const char *format, ...) {
+  if (LOG_INFO < logger->level)
+    return;
+
   char log_buffer[LOG_MESSAGE_MAX_LENGTH];
   va_list args;
   va_start(args, format);
   vsnprintf(log_buffer, LOG_MESSAGE_MAX_LENGTH, format, args);
   va_end(args);
 
-  log_info(log_buffer);
+  log_message(logger, LOG_INFO, log_buffer);
 }
