@@ -3,7 +3,7 @@
 #include <string.h>
 
 /**
- * Initialize the ring buffe
+ * Initialize the ring buffer
  */
 void init_ring_buffer(ring_buffer_t *rb) {
   rb->head = 0;

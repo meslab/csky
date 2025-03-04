@@ -28,7 +28,7 @@ LogLevel parse_log_level(const char *level_str) {
   return LOG_ERROR;
 }
 
-void log_message(Logger *logger, LogLevel level, const char *message) {
+void log_message(Logger *logger, const LogLevel level, const char *message) {
   if (level < logger->level)
     return;
 

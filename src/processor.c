@@ -37,6 +37,7 @@ void *data_processor_thread(void *arg) {
     if (ring_buffer_get(rb, line) == 0) {
       strip_chars(line);
       log_info(logger, line);
+      log_info_formatted(logger, "Head: %d, tail: %d\n", rb->head, rb->tail);
       process_adsb(line);
     }
   }
