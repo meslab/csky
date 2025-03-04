@@ -4,7 +4,7 @@
 #include <pthread.h>
 
 #define BUFFER_SIZE 10     // Number of stored lines
-#define MAX_LINE_LENGTH 64 // Max length of a single line
+#define MAX_LINE_LENGTH 42 // Max length of a single line
 
 typedef struct {
   char buffer[BUFFER_SIZE]

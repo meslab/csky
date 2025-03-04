@@ -8,12 +8,27 @@
 #include <stdlib.h>
 
 /**
+ * Init ProcessorArgs
+ */
+inline int8_t init_data_processor_args(ProcessorArgs *data_processor_args,
+                                       ring_buffer_t *ring_buffer,
+                                       Options *opts, Logger *logger) {
+  if (!data_processor_args) {
+    return -1;
+  }
+  data_processor_args->rb = ring_buffer;
+  data_processor_args->opts = opts;
+  data_processor_args->logger = logger;
+
+  return 0;
+}
+
+/**
  * Data processing thread: Reads from ring buffer, processes hex data
  */
 void *data_processor_thread(void *arg) {
   ProcessorArgs *args = (ProcessorArgs *)arg;
 
-  // Options *opts = args->opts;
   ring_buffer_t *rb = args->rb;
   Logger *logger = args->logger;
 

@@ -11,6 +11,11 @@ typedef struct {
   Logger *logger;
 } TcpClientArgs;
 
+int8_t init_tcp_client_args(TcpClientArgs *tcp_client_args,
+                            ring_buffer_t *ring_buffer, Options *opts,
+                            Logger *logger);
 void *tcp_client_thread(void *arg);
+
+void read_lines(int sockfd, ring_buffer_t *rb);
 
 #endif // CLIENT_H
