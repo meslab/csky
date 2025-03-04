@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
   processor_args->opts = &opts;
   processor_args->logger = logger;
 
+  arena_info(logger, &arena);
+
   pthread_create(&client_thread, NULL, tcp_client_thread, tcp_client_args);
   pthread_create(&processor_thread, NULL, data_processor_thread,
                  processor_args);
