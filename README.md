@@ -1,1 +1,1 @@
-# csquitrat
+# squitterator - back to basics
