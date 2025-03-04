@@ -1,4 +1,5 @@
 #include "../include/ads_b.h"
+#include "../include/logger.h"
 
 /**
  * Convert a hex string to a uint8_t array

@@ -11,10 +11,12 @@ int main(int argc, char *argv[]) {
 
   pthread_t client_thread, processor_thread;
 
-  ThreadArgs thread_args = {&ring_buffer, &opts};
+  ClientArgs client_args = {&ring_buffer, &opts};
+  ProcessorArgs processor_args = {&ring_buffer, &opts};
 
-  pthread_create(&client_thread, NULL, tcp_client_thread, &thread_args);
-  pthread_create(&processor_thread, NULL, data_processor_thread, &ring_buffer);
+  pthread_create(&client_thread, NULL, tcp_client_thread, &client_args);
+  pthread_create(&processor_thread, NULL, data_processor_thread,
+                 &processor_args);
 
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);

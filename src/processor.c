@@ -11,7 +11,10 @@
  * Data processing thread: Reads from ring buffer, processes hex data
  */
 void *data_processor_thread(void *arg) {
-  ring_buffer_t *rb = (ring_buffer_t *)arg;
+  ProcessorArgs *args = (ProcessorArgs *)arg;
+
+  // Options *opts = args->opts;
+  ring_buffer_t *rb = args->rb;
 
   while (1) {
     char line[MAX_LINE_LENGTH + 1];

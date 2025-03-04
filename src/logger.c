@@ -1,5 +1,6 @@
 #include "../include/logger.h"
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -38,7 +39,6 @@ void log_message(LogLevel level, const char *message) {
   FILE *dest = (level == LOG_ERROR) ? (err_log ? err_log : stderr)
                                     : (out_log ? out_log : stdout);
 
-  // Get timestamp
   time_t now = time(NULL);
   struct tm *tm_info = localtime(&now);
   char time_buf[20]; // YYYY-MM-DD HH:MM:SS
@@ -47,11 +47,6 @@ void log_message(LogLevel level, const char *message) {
   fprintf(dest, "[%s] [%s] %s\n", time_buf, log_level_str(level), message);
   fflush(dest);
 }
-
-void log_error(const char *message) { log_message(LOG_ERROR, message); }
-void log_info(const char *message) { log_message(LOG_INFO, message); }
-void log_warning(const char *message) { log_message(LOG_WARNING, message); }
-void log_debug(const char *message) { log_message(LOG_DEBUG, message); }
 
 int init_logger(const Options *opts) {
   if (!opts)
@@ -89,4 +84,19 @@ void close_logger() {
   if (out_log)
     fclose(out_log);
   err_log = out_log = NULL;
+}
+
+void log_error(const char *message) { log_message(LOG_ERROR, message); }
+void log_info(const char *message) { log_message(LOG_INFO, message); }
+void log_warning(const char *message) { log_message(LOG_WARNING, message); }
+void log_debug(const char *message) { log_message(LOG_DEBUG, message); }
+
+void log_info_formatted(const char *format, ...) {
+  char log_buffer[LOG_MESSAGE_MAX_LENGTH];
+  va_list args;
+  va_start(args, format);
+  vsnprintf(log_buffer, LOG_MESSAGE_MAX_LENGTH, format, args);
+  va_end(args);
+
+  log_info(log_buffer);
 }

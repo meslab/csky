@@ -7,7 +7,7 @@
 typedef struct {
   ring_buffer_t *rb;
   Options *opts;
-} ThreadArgs;
+} ClientArgs;
 
 void *tcp_client_thread(void *arg);
 
