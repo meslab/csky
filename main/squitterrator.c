@@ -5,6 +5,7 @@ int main(int argc, char *argv[]) {
   parse_arguments(argc, argv, &opts);
 
   Logger logger;
+
   init_logger(&logger, &opts);
 
   ring_buffer_t ring_buffer;
@@ -22,7 +23,7 @@ int main(int argc, char *argv[]) {
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);
 
-  close_logger();
+  close_logger(&logger);
 
   return 0;
 }
