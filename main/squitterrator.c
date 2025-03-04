@@ -4,25 +4,39 @@ int main(int argc, char *argv[]) {
   Options opts;
   parse_arguments(argc, argv, &opts);
 
-  Logger logger;
-  init_logger(&logger, &opts);
+  MemoryArena arena;
+  arena_init(&arena, 1024 * 1024);
 
-  ring_buffer_t ring_buffer;
-  init_ring_buffer(&ring_buffer);
+  Logger *logger = (Logger *)arena_alloc(&arena, sizeof(Logger));
+  init_logger(logger, &opts);
+
+  ring_buffer_t *ring_buffer = arena_alloc(&arena, sizeof(ring_buffer));
+  init_ring_buffer(ring_buffer);
 
   pthread_t client_thread, processor_thread;
 
-  ClientArgs client_args = {&ring_buffer, &opts, &logger};
-  ProcessorArgs processor_args = {&ring_buffer, &opts, &logger};
+  TcpClientArgs *tcp_client_args =
+      (TcpClientArgs *)arena_alloc(&arena, sizeof(TcpClientArgs));
+  tcp_client_args->rb = ring_buffer;
+  tcp_client_args->opts = &opts;
+  tcp_client_args->logger = logger;
 
-  pthread_create(&client_thread, NULL, tcp_client_thread, &client_args);
+  ProcessorArgs *processor_args =
+      (ProcessorArgs *)arena_alloc(&arena, sizeof(ProcessorArgs));
+  processor_args->rb = ring_buffer;
+  processor_args->opts = &opts;
+  processor_args->logger = logger;
+
+  pthread_create(&client_thread, NULL, tcp_client_thread, tcp_client_args);
   pthread_create(&processor_thread, NULL, data_processor_thread,
-                 &processor_args);
+                 processor_args);
 
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);
 
-  close_logger(&logger);
+  close_logger(logger);
+
+  arena_free(&arena);
 
   return 0;
 }

@@ -1,6 +1,7 @@
 #ifndef SQUITTERATOR_H
 #define SQUITTERATOR_H
 
+#include "../include/arena.h"
 #include "../include/arg_parser.h"
 #include "../include/client.h"
 #include "../include/logger.h"
