@@ -46,6 +46,10 @@ void log_message(Logger *logger, LogLevel level, const char *message) {
 }
 
 int init_logger(Logger *logger, const Options *opts) {
+  logger->err_log = NULL;
+  logger->out_log = NULL;
+  logger->level = LOG_ERROR;
+
   if (!opts)
     return -1; // Ensure opts is valid
 
