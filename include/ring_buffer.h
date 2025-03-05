@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 
-#define BUFFER_SIZE 8 * 2            // Number of stored lines
+#define BUFFER_SIZE  (1 << 5)        // Number of stored lines
 #define BUFFER_AND (BUFFER_SIZE - 1) // Modulo (%) optimisation
 #define MAX_LINE_LENGTH 63           // Max length of a single line
 
