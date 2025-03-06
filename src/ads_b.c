@@ -61,7 +61,7 @@ void process_short_message(uint8_t full_message[20], Logger *logger) {
                      (full_message[2] << 8) | full_message[3];
   memcpy(msg_short.parity, full_message + 4, 3);
 
-  char parity_str[9]; // Enough for "XX XX XX\0"
+  char parity_str[3 * 3]; // Enough for "XX XX XX\0"
   snprintf(parity_str, sizeof(parity_str), "%02X %02X %02X",
            msg_short.parity[0], msg_short.parity[1], msg_short.parity[2]);
 
