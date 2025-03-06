@@ -1,6 +1,8 @@
 #ifndef ADS_B_H
 #define ADS_B_H
 
+#include "../include/logger.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +19,6 @@ typedef struct {
   uint8_t parity[3]; // 3 bytes (Parity)
 } adsb_short_t;
 
-void process_adsb(const char *hex_str);
+void process_adsb(Logger *logger, const char *hex_str);
 
 #endif // ADS_B_H

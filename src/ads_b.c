@@ -1,5 +1,4 @@
 #include "../include/ads_b.h"
-#include "../include/logger.h"
 
 /**
  * Convert a hex string to a uint8_t array
@@ -14,12 +13,12 @@ void hex_to_bytes(const char *hex_str, uint8_t *bytes, size_t len) {
  * Function to process the ADS-B hex string
  * into adsb_ext_t or adsb_short_t
  */
-void process_adsb(const char *hex_str) {
+void process_adsb(Logger *logger, const char *hex_str) {
   size_t len = strlen(hex_str);
 
   // Check if the length is either 26 or 40 hex symbols (13 or 20 bytes)
   if (len != 26 && len != 40) {
-    printf("Invalid hex string length\n");
+    log_error(logger, "Invalid hex string length\n");
     return;
   }
 
