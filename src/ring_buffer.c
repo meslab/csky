@@ -2,17 +2,16 @@
 
 #include <string.h>
 
-/**
- * Initialize the ring buffer
- */
+/// @brief Initialize the ring buffer
+/// @param rb The ring buffer
 void init_ring_buffer(ring_buffer_t *rb) {
   rb->head = 0;
   rb->tail = 0;
 }
 
-/**
- * Insert a new line into the ring buffer
- */
+/// @brief Insert a line into the ring buffer
+/// @param rb   The ring buffer
+/// @param line The line to insert
 void ring_buffer_insert(ring_buffer_t *rb, const char *line) {
   int head = rb->head;
   int next_head = (head + 1) & BUFFER_AND;
@@ -26,9 +25,10 @@ void ring_buffer_insert(ring_buffer_t *rb, const char *line) {
   rb->head = next_head;
 }
 
-/**
- * Retrieve a line from the ring buffer
- */
+/// @brief Get a line from the ring buffer
+/// @param rb   The ring buffer
+/// @param line The line to get
+/// @return 0 on success, -1 if the buffer is empty
 int ring_buffer_get(ring_buffer_t *rb, char *line) {
   int tail = rb->tail;
   if (tail == rb->head) {

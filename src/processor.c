@@ -7,9 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/**
- * Init ProcessorArgs
- */
+/// @brief Initialize data processor arguments
+/// @param data_processor_args Data processor arguments
+/// @param ring_buffer Ring buffer
+/// @param opts Options
+/// @param logger Logger
+/// @return int8_t 0 on success, -1 on failure
 inline int8_t init_data_processor_args(ProcessorArgs *data_processor_args,
                                        ring_buffer_t *ring_buffer,
                                        Options *opts, Logger *logger) {
@@ -23,9 +26,9 @@ inline int8_t init_data_processor_args(ProcessorArgs *data_processor_args,
   return 0;
 }
 
-/**
- * Data processing thread: Reads from ring buffer, processes hex data
- */
+/// @brief Data processor thread
+/// @param arg Processor arguments
+/// @return void*
 void *data_processor_thread(void *arg) {
   ProcessorArgs *args = (ProcessorArgs *)arg;
 
@@ -47,9 +50,9 @@ void *data_processor_thread(void *arg) {
   return NULL;
 }
 
-/**
- * Strip characters from a string
- */
+/// @brief Strip characters from a string
+/// @param str String to strip characters from (in-place)
+/// @return void
 void strip_chars(char *str) {
   int i, j = 0;
   int len = strlen(str);

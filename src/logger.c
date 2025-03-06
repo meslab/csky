@@ -5,6 +5,12 @@
 #include <string.h>
 #include <time.h>
 
+/**
+ * @brief Get the string representation of a log level
+ *
+ * @param level The log level
+ * @return const char* The string representation of the log level
+ */
 const char *log_level_str(LogLevel level) {
   switch (level) {
   case LOG_DEBUG:
@@ -18,6 +24,12 @@ const char *log_level_str(LogLevel level) {
   }
 }
 
+/**
+ * @brief Parse a string to a log level
+ *
+ * @param level_str The string representation of the log level
+ * @return LogLevel The log level
+ */
 LogLevel parse_log_level(const char *level_str) {
   if (strcmp(level_str, "DEBUG") == 0 || strcmp(level_str, "D") == 0)
     return LOG_DEBUG;
@@ -28,6 +40,13 @@ LogLevel parse_log_level(const char *level_str) {
   return LOG_ERROR;
 }
 
+/**
+ * @brief Log a message to the appropriate destination
+ *
+ * @param logger The logger
+ * @param level The log level
+ * @param message The message to log
+ */
 void log_message(Logger *logger, const LogLevel level, const char *message) {
   if (level < logger->level)
     return;
@@ -45,6 +64,13 @@ void log_message(Logger *logger, const LogLevel level, const char *message) {
   fflush(dest);
 }
 
+/**
+ * @brief Initialize the logger
+ *
+ * @param logger The logger
+ * @param opts The options
+ * @return int 0 on success, -1 on failure
+ */
 int init_logger(Logger *logger, const Options *opts) {
   logger->err_log = NULL;
   logger->out_log = NULL;
@@ -78,6 +104,11 @@ int init_logger(Logger *logger, const Options *opts) {
   return 0; // Success
 }
 
+/**
+ * @brief Close the logger
+ *
+ * @param logger The logger
+ */
 void close_logger(Logger *logger) {
   if (logger->err_log)
     fclose(logger->err_log);
@@ -86,19 +117,38 @@ void close_logger(Logger *logger) {
   logger->err_log = logger->out_log = NULL;
 }
 
+/// @brief Log an error message
+/// @param logger  The logger
+/// @param message The message to log
 void log_error(Logger *logger, const char *message) {
   log_message(logger, LOG_ERROR, message);
 }
+
+/// @brief Log an info message
+/// @param logger  The logger
+/// @param message The message to log
 void log_info(Logger *logger, const char *message) {
   log_message(logger, LOG_INFO, message);
 }
+
+/// @brief Log a warning message
+/// @param logger  The logger
+/// @param message The message to log
 void log_warning(Logger *logger, const char *message) {
   log_message(logger, LOG_WARNING, message);
 }
+
+/// @brief Log a debug message
+/// @param logger  The logger
+/// @param message The message to log
 void log_debug(Logger *logger, const char *message) {
   log_message(logger, LOG_DEBUG, message);
 }
 
+/// @brief Log an info message with a formatted string
+/// @param logger The logger
+/// @param format The format string
+/// @param    ... The format arguments
 void log_info_formatted(Logger *logger, const char *format, ...) {
   if (LOG_INFO < logger->level)
     return;
@@ -112,6 +162,10 @@ void log_info_formatted(Logger *logger, const char *format, ...) {
   log_message(logger, LOG_INFO, log_buffer);
 }
 
+/// @brief Log a debug message with a formatted string
+/// @param logger The logger
+/// @param format The format string
+/// @param    ... The format arguments
 void log_debug_formatted(Logger *logger, const char *format, ...) {
   if (LOG_DEBUG < logger->level)
     return;

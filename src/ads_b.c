@@ -1,18 +1,18 @@
 #include "../include/ads_b.h"
 
-/**
- * Convert a hex string to a uint8_t array
- */
+/// @brief Convert a hex string to a byte array
+/// @param hex_str
+/// @param bytes
+/// @param len
 void hex_to_bytes(const char *hex_str, uint8_t *bytes, size_t len) {
   for (size_t i = 0; i < len; i++) {
     sscanf(hex_str + 2 * i, "%2hhx", &bytes[i]);
   }
 }
 
-/**
- * Function to process the ADS-B hex string
- * into adsb_ext_t or adsb_short_t
- */
+/// @brief Process the ADS-B hex string
+/// @param logger
+/// @param hex_str  The hex string to process
 void process_adsb(Logger *logger, const char *hex_str) {
   size_t len = strlen(hex_str);
 
@@ -35,6 +35,9 @@ void process_adsb(Logger *logger, const char *hex_str) {
   }
 }
 
+/// @brief Process an extended message
+/// @param full_message
+/// @param logger
 void process_ext_message(uint8_t full_message[20], Logger *logger) {
   adsb_ext_t msg_ext;
   msg_ext.header = (full_message[0] << 24) | (full_message[1] << 16) |
@@ -55,6 +58,10 @@ void process_ext_message(uint8_t full_message[20], Logger *logger) {
   log_info_formatted(logger, "\nHeader: 0x%08X\nData: %s\nParity: %s\n",
                      msg_ext.header, data_str, parity_str);
 }
+
+/// @brief Process a short message
+/// @param full_message
+/// @param logger
 void process_short_message(uint8_t full_message[20], Logger *logger) {
   adsb_short_t msg_short;
   msg_short.header = (full_message[0] << 24) | (full_message[1] << 16) |

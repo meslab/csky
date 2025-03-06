@@ -7,7 +7,13 @@
 #include <unistd.h>
 
 /**
- * Init TcpClientArgs
+ * @brief Initialize the TCP client arguments
+ *
+ * @param tcp_client_args TCP client arguments
+ * @param ring_buffer Ring buffer
+ * @param opts Options
+ * @param logger Logger
+ * @return int8_t 0 on success, -1 on failure
  */
 inline int8_t init_tcp_client_args(TcpClientArgs *tcp_client_args,
                                    ring_buffer_t *ring_buffer, Options *opts,
@@ -23,7 +29,10 @@ inline int8_t init_tcp_client_args(TcpClientArgs *tcp_client_args,
 }
 
 /**
- * TCP client thread: Connects to server, reads data, and stores in ring buffer
+ * @brief TCP client thread
+ *
+ * @param arg Arguments
+ * @return void*
  */
 void *tcp_client_thread(void *arg) {
   TcpClientArgs *args = (TcpClientArgs *)arg;
@@ -64,6 +73,12 @@ void *tcp_client_thread(void *arg) {
   return NULL;
 }
 
+/**
+ * @brief Read lines from the socket and insert them into the ring buffer
+ *
+ * @param sockfd Socket file descriptor
+ * @param rb Ring buffer
+ */
 void read_lines(int sockfd, ring_buffer_t *rb) {
   char buffer[1024];              // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
