@@ -41,7 +41,7 @@ void *data_processor_thread(void *arg) {
           logger, "Head: %2d, tail: %2d, entries: %2d\n", rb->head, rb->tail,
           rb->head < rb->tail ? rb->head - rb->tail + BUFFER_SIZE
                               : rb->head - rb->tail);
-      process_adsb(line);
+      process_adsb(logger, line);
     }
   }
   return NULL;
