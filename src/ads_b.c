@@ -29,41 +29,42 @@ void process_adsb(Logger *logger, const char *hex_str) {
   hex_to_bytes(hex_str + 12, full_message, len / 2 - 6);
 
   if (len == 26) {
-    // Process the 26-character hex string (13 bytes)
-    // 1. Convert the next 8 hex symbols to the header
-    adsb_short_t msg_short;
-    msg_short.header = (full_message[0] << 24) | (full_message[1] << 16) |
-                       (full_message[2] << 8) | full_message[3];
-    memcpy(msg_short.parity, full_message + 4, 3);
-
-    // Print the result
-    printf("Header: 0x%08X\n", msg_short.header);
-    printf("Parity: ");
-    for (int i = 0; i < 3; i++) {
-      printf("%02X ", msg_short.parity[i]);
-    }
-    printf("\n");
-
+    process_short_message(full_message, logger);
   } else if (len == 40) {
-    // Process the 40-character hex string (20 bytes)
-    // 1. Convert the next 8 hex symbols to the header
-    adsb_ext_t msg_ext;
-    msg_ext.header = (full_message[0] << 24) | (full_message[1] << 16) |
-                     (full_message[2] << 8) | full_message[3];
-    memcpy(msg_ext.data, full_message + 4, 7);
-    memcpy(msg_ext.parity, full_message + 11, 3);
-
-    // Print the result
-    printf("Header: 0x%08X\n", msg_ext.header);
-    printf("Data: ");
-    for (int i = 0; i < 7; i++) {
-      printf("%02X ", msg_ext.data[i]);
-    }
-    printf("\n");
-    printf("Parity: ");
-    for (int i = 0; i < 3; i++) {
-      printf("%02X ", msg_ext.parity[i]);
-    }
-    printf("\n");
+    process_ext_message(full_message, logger);
   }
+}
+
+void process_ext_message(uint8_t full_message[20], Logger *logger) {
+  adsb_ext_t msg_ext;
+  msg_ext.header = (full_message[0] << 24) | (full_message[1] << 16) |
+                   (full_message[2] << 8) | full_message[3];
+  memcpy(msg_ext.data, full_message + 4, 7);
+  memcpy(msg_ext.parity, full_message + 11, 3);
+
+  char data_str[3 * 7];   // Each byte: "XX " (3 chars), 7 bytes -> 21 chars
+  char parity_str[3 * 3]; // Each byte: "XX " (3 chars), 3 bytes -> 9 chars
+
+  snprintf(data_str, sizeof(data_str), "%02X %02X %02X %02X %02X %02X %02X",
+           msg_ext.data[0], msg_ext.data[1], msg_ext.data[2], msg_ext.data[3],
+           msg_ext.data[4], msg_ext.data[5], msg_ext.data[6]);
+
+  snprintf(parity_str, sizeof(parity_str), "%02X %02X %02X", msg_ext.parity[0],
+           msg_ext.parity[1], msg_ext.parity[2]);
+
+  log_info_formatted(logger, "\nHeader: 0x%08X\nData: %s\nParity: %s\n",
+                     msg_ext.header, data_str, parity_str);
+}
+void process_short_message(uint8_t full_message[20], Logger *logger) {
+  adsb_short_t msg_short;
+  msg_short.header = (full_message[0] << 24) | (full_message[1] << 16) |
+                     (full_message[2] << 8) | full_message[3];
+  memcpy(msg_short.parity, full_message + 4, 3);
+
+  char parity_str[9]; // Enough for "XX XX XX\0"
+  snprintf(parity_str, sizeof(parity_str), "%02X %02X %02X",
+           msg_short.parity[0], msg_short.parity[1], msg_short.parity[2]);
+
+  log_info_formatted(logger, "\nHeader: 0x%08X\nParity: %s\n", msg_short.header,
+                     parity_str);
 }

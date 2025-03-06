@@ -21,4 +21,8 @@ typedef struct {
 
 void process_adsb(Logger *logger, const char *hex_str);
 
+void process_ext_message(uint8_t full_message[20], Logger *logger);
+
+void process_short_message(uint8_t full_message[20], Logger *logger);
+
 #endif // ADS_B_H
