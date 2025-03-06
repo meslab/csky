@@ -47,6 +47,9 @@ void *data_processor_thread(void *arg) {
   return NULL;
 }
 
+/**
+ * Strip characters from a string
+ */
 void strip_chars(char *str) {
   int i, j = 0;
   int len = strlen(str);
