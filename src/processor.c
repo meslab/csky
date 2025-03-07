@@ -39,7 +39,7 @@ void *data_processor_thread(void *arg) {
     char line[MAX_LINE_LENGTH + 1];
     if (ring_buffer_get(rb, line) == 0) {
       strip_chars(line);
-      log_info(logger, line);
+      log_debug(logger, line);
       log_debug_formatted(
           logger, "Head: %2d, tail: %2d, entries: %2d\n", rb->head, rb->tail,
           rb->head < rb->tail ? rb->head - rb->tail + BUFFER_SIZE
