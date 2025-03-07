@@ -84,7 +84,7 @@ void read_lines(int sockfd, ring_buffer_t *rb) {
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
   int line_pos = 0;
 
-  while (1) {
+  while (!stop) {
     ssize_t bytes_read = read(sockfd, buffer, sizeof(buffer) - 1);
     if (bytes_read <= 0)
       break; // Exit on error or disconnect

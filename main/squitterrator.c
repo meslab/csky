@@ -1,6 +1,8 @@
 #include "../include/squitterrator.h"
 
 int main(int argc, char *argv[]) {
+  signal(SIGINT, handle_sigint);
+
   Options opts;
   parse_arguments(argc, argv, &opts);
 

@@ -4,6 +4,7 @@
 #include "../include/arg_parser.h"
 #include "../include/logger.h"
 #include "../include/ring_buffer.h"
+#include "../include/stop.h"
 
 typedef struct {
   ring_buffer_t *rb;

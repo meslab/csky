@@ -35,7 +35,7 @@ void *data_processor_thread(void *arg) {
   ring_buffer_t *rb = args->rb;
   Logger *logger = args->logger;
 
-  while (1) {
+  while (!stop) {
     char line[MAX_LINE_LENGTH + 1];
     if (ring_buffer_get(rb, line) == 0) {
       strip_chars(line);

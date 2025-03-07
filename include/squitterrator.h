@@ -7,6 +7,7 @@
 #include "../include/logger.h"
 #include "../include/processor.h"
 #include "../include/ring_buffer.h"
+#include "../include/stop.h"
 #include "../include/utils.h"
 
 #endif // SQUITTERATOR_H
