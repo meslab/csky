@@ -9,8 +9,11 @@
 
 typedef struct {
   char buffer[BUFFER_SIZE][MAX_LINE_LENGTH + 1]; // Extra byte for '\0'
-  volatile int head;
-  volatile int tail;
+  int head;
+  int tail;
+  pthread_mutex_t mutex;
+  pthread_cond_t not_empty;
+  pthread_cond_t not_full;
 } ring_buffer_t;
 
 void init_ring_buffer(ring_buffer_t *rb);
