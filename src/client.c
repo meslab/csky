@@ -80,7 +80,7 @@ void *tcp_client_thread(void *arg) {
  * @param rb Ring buffer
  */
 void read_lines(int sockfd, ring_buffer_t *rb) {
-  char buffer[1024];              // Temporary buffer
+  char buffer[128 * 1024];        // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
   int line_pos = 0;
 

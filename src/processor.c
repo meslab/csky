@@ -41,7 +41,7 @@ void *data_processor_thread(void *arg) {
       strip_chars(line);
       log_debug(logger, line);
       log_debug_formatted(
-          logger, "Head: %2d, tail: %2d, entries: %2d\n", rb->head, rb->tail,
+          logger, "Head: %2d, tail: %2d, entries: %2d", rb->head, rb->tail,
           rb->head < rb->tail ? rb->head - rb->tail + BUFFER_SIZE
                               : rb->head - rb->tail);
       process_adsb(logger, line);

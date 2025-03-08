@@ -16,29 +16,28 @@ void hex_to_bytes(const char *hex_str, uint8_t *bytes, size_t len) {
 void process_adsb(Logger *logger, const char *hex_str) {
   size_t len = strlen(hex_str);
 
-  // Check if the length is either 26 or 40 hex symbols (13 or 20 bytes)
-  if (len != 26 && len != 40) {
-    log_error(logger, "Invalid hex string length\n");
-    return;
-  }
+  uint8_t short_message[7]; // Maximum size: 7 bytes (56 bits)
+  uint8_t full_message[14]; // Maximum size: 14 bytes (112 bits)
 
-  // Allocate a byte buffer for the full message
-  uint8_t full_message[20]; // Maximum size: 20 bytes (160 bits)
-
-  // Drop the first 12 hex characters (6 bytes)
-  hex_to_bytes(hex_str + 12, full_message, len / 2 - 6);
-
-  if (len == 26) {
-    process_short_message(full_message, logger);
-  } else if (len == 40) {
+  switch (len) {
+  case 26:
+    hex_to_bytes(hex_str + 12, short_message, len / 2 - 6);
+    process_short_message(short_message, logger);
+    break;
+  case 40:
+    hex_to_bytes(hex_str + 12, full_message, len / 2 - 6);
     process_ext_message(full_message, logger);
+    break;
+  default:
+    log_error(logger, "Invalid hex string length\n");
+    break;
   }
 }
 
 /// @brief Process an extended message
 /// @param full_message
 /// @param logger
-void process_ext_message(uint8_t full_message[20], Logger *logger) {
+void process_ext_message(uint8_t full_message[ADSB_EXT_LEN], Logger *logger) {
   adsb_ext_t msg_ext;
   msg_ext.header = (full_message[0] << 24) | (full_message[1] << 16) |
                    (full_message[2] << 8) | full_message[3];
@@ -55,14 +54,15 @@ void process_ext_message(uint8_t full_message[20], Logger *logger) {
   snprintf(parity_str, sizeof(parity_str), "%02X %02X %02X", msg_ext.parity[0],
            msg_ext.parity[1], msg_ext.parity[2]);
 
-  log_info_formatted(logger, "\nHeader: 0x%08X\nData: %s\nParity: %s\n",
+  log_info_formatted(logger, "\nHeader: 0x%08X\nData: %s\nParity: %s",
                      msg_ext.header, data_str, parity_str);
 }
 
 /// @brief Process a short message
 /// @param full_message
 /// @param logger
-void process_short_message(uint8_t full_message[20], Logger *logger) {
+void process_short_message(uint8_t full_message[ADSB_SHORT_LEN],
+                           Logger *logger) {
   adsb_short_t msg_short;
   msg_short.header = (full_message[0] << 24) | (full_message[1] << 16) |
                      (full_message[2] << 8) | full_message[3];
@@ -72,6 +72,6 @@ void process_short_message(uint8_t full_message[20], Logger *logger) {
   snprintf(parity_str, sizeof(parity_str), "%02X %02X %02X",
            msg_short.parity[0], msg_short.parity[1], msg_short.parity[2]);
 
-  log_info_formatted(logger, "\nHeader: 0x%08X\nParity: %s\n", msg_short.header,
+  log_info_formatted(logger, "\nHeader: 0x%08X\nParity: %s", msg_short.header,
                      parity_str);
 }
