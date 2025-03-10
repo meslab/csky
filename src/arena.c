@@ -1,6 +1,8 @@
 #include "../include/arena.h"
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /// @brief Initialize a memory arena
 /// @param arena The memory arena to initialize
@@ -9,6 +11,7 @@ void arena_init(MemoryArena *arena, size_t size) {
   arena->buffer = (uint8_t *)malloc(size);
   if (arena->buffer == NULL) {
     perror("Failed to allocate memory for arena");
+    fprintf(stderr, "errno: %d, strerror: %s\n", errno, strerror(errno));
     exit(EXIT_FAILURE);
   }
   arena->size = size;

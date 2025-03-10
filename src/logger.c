@@ -1,5 +1,6 @@
 #include "../include/logger.h"
 
+#include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -87,6 +88,7 @@ int init_logger(Logger *logger, const Options *opts) {
     logger->err_log = fopen(opts->err_log, "a");
     if (!logger->err_log) {
       perror("Failed to open error log file");
+      fprintf(stderr, "errno: %d, strerror: %s\n", errno, strerror(errno));
       return -1;
     }
   }
@@ -95,6 +97,7 @@ int init_logger(Logger *logger, const Options *opts) {
     logger->err_log = fopen(opts->out_log, "a");
     if (!logger->out_log) {
       perror("Failed to open output log file");
+      fprintf(stderr, "errno: %d, strerror: %s\n", errno, strerror(errno));
       if (logger->err_log)
         fclose(logger->err_log);
       return -1;
