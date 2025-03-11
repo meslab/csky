@@ -53,7 +53,7 @@ void *data_processor_thread(void *arg) {
 /// @brief Strip characters from a string
 /// @param str String to strip characters from (in-place)
 /// @return void
-void strip_chars(char *str) {
+size_t strip_chars(char *str) {
   int i, j = 0;
   int len = strlen(str);
 
@@ -63,4 +63,5 @@ void strip_chars(char *str) {
     }
   }
   str[j] = '\0';
+  return j;
 }

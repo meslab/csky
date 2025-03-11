@@ -16,6 +16,6 @@ int8_t init_data_processor_args(ProcessorArgs *data_processor_args,
                                 Logger *logger);
 
 void *data_processor_thread(void *arg);
-void strip_chars(char *str);
+size_t strip_chars(char *str);
 
 #endif // PROCESSOR_H
