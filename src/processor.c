@@ -13,9 +13,10 @@
 /// @param opts Options
 /// @param logger Logger
 /// @return int8_t 0 on success, -1 on failure
-inline int8_t init_data_processor_args(ProcessorArgs *data_processor_args,
-                                       ring_buffer_t *ring_buffer,
-                                       Options *opts, Logger *logger) {
+inline int8_t
+data_processor_thread_args_init(ProcessorArgs *data_processor_args,
+                                ring_buffer_t *ring_buffer, Options *opts,
+                                Logger *logger) {
   if (!data_processor_args) {
     return -1;
   }
@@ -38,7 +39,7 @@ void *data_processor_thread(void *arg) {
   while (1) {
     char line[MAX_LINE_LENGTH + 1];
     if (ring_buffer_get(rb, line) == 0) {
-      strip_chars(line);
+      squitter_strip_chars(line);
       debug_log(logger, line);
       debug_log_formatted(
           logger, "Head: %2d, tail: %2d, entries: %2d", rb->head, rb->tail,
@@ -53,7 +54,7 @@ void *data_processor_thread(void *arg) {
 /// @brief Strip characters from a string
 /// @param str String to strip characters from (in-place)
 /// @return void
-size_t strip_chars(char *str) {
+size_t squitter_strip_chars(char *str) {
   int i, j = 0;
   int len = strlen(str);
 

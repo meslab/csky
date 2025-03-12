@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
   ProcessorArgs *processor_args =
       (ProcessorArgs *)arena_alloc(&arena, sizeof(ProcessorArgs));
 
-  if (init_data_processor_args(processor_args, ring_buffer, &opts, logger)) {
+  if (data_processor_thread_args_init(processor_args, ring_buffer, &opts,
+                                      logger)) {
     error_log(logger, "ProcessorArgs init failed.");
     return -1;
   }
