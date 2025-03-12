@@ -13,6 +13,6 @@ typedef struct Options {
   char *out_log;
 } Options;
 
-void parse_arguments(int argc, char *argv[], Options *opt);
+void arguments_parse(int argc, char *argv[], Options *opt);
 
 #endif // ARG_PARSER_H

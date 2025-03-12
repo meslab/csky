@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
   Options opts;
-  parse_arguments(argc, argv, &opts);
+  arguments_parse(argc, argv, &opts);
 
   MemoryArena arena;
   arena_init(&arena, 1024 * 1024);

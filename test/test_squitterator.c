@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]) {
   Options opts;
-  parse_arguments(argc, argv, &opts);
+  arguments_parse(argc, argv, &opts);
 
   Logger logger;
   init_logger(&logger, &opts);
