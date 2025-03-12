@@ -16,7 +16,7 @@
  * @return int8_t 0 on success, -1 on failure
  */
 inline int8_t tcp_client_thread_init(TcpClientArgs *tcp_client_args,
-                                     ring_buffer_t *ring_buffer, Options *opts,
+                                     ringBuffer *ring_buffer, Options *opts,
                                      Logger *logger) {
   if (!tcp_client_args) {
     return -1;
@@ -38,7 +38,7 @@ void *tcp_client_thread(void *arg) {
   TcpClientArgs *args = (TcpClientArgs *)arg;
 
   Options *opts = args->opts;
-  ring_buffer_t *rb = args->rb;
+  ringBuffer *rb = args->rb;
   Logger *logger = args->logger;
 
   int sockfd;
@@ -79,7 +79,7 @@ void *tcp_client_thread(void *arg) {
  * @param sockfd Socket file descriptor
  * @param rb Ring buffer
  */
-void lines_read(int sockfd, ring_buffer_t *rb) {
+void lines_read(int sockfd, ringBuffer *rb) {
   char buffer[128 * 1024];        // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
   int line_pos = 0;

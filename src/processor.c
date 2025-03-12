@@ -15,7 +15,7 @@
 /// @return int8_t 0 on success, -1 on failure
 inline int8_t
 data_processor_thread_args_init(ProcessorArgs *data_processor_args,
-                                ring_buffer_t *ring_buffer, Options *opts,
+                                ringBuffer *ring_buffer, Options *opts,
                                 Logger *logger) {
   if (!data_processor_args) {
     return -1;
@@ -33,7 +33,7 @@ data_processor_thread_args_init(ProcessorArgs *data_processor_args,
 void *data_processor_thread(void *arg) {
   ProcessorArgs *args = (ProcessorArgs *)arg;
 
-  ring_buffer_t *rb = args->rb;
+  ringBuffer *rb = args->rb;
   Logger *logger = args->logger;
 
   while (1) {

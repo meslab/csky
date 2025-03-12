@@ -14,10 +14,10 @@ typedef struct {
   pthread_mutex_t mutex;
   pthread_cond_t not_empty;
   pthread_cond_t not_full;
-} ring_buffer_t;
+} ringBuffer;
 
-void init_ring_buffer(ring_buffer_t *rb);
-void ring_buffer_insert(ring_buffer_t *rb, const char *line);
-int ring_buffer_get(ring_buffer_t *rb, char *line);
+void ring_buffer_init(ringBuffer *rb);
+void ring_buffer_insert(ringBuffer *rb, const char *line);
+int ring_buffer_get(ringBuffer *rb, char *line);
 
 #endif // RING_BUFFER_H

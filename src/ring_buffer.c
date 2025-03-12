@@ -5,7 +5,7 @@
 /**
  * Initialize the ring buffer
  */
-void init_ring_buffer(ring_buffer_t *rb) {
+void ring_buffer_init(ringBuffer *rb) {
   rb->head = 0;
   rb->tail = 0;
   pthread_mutex_init(&rb->mutex, NULL);
@@ -16,7 +16,7 @@ void init_ring_buffer(ring_buffer_t *rb) {
 /**
  * Insert a new line into the ring buffer
  */
-void ring_buffer_insert(ring_buffer_t *rb, const char *line) {
+void ring_buffer_insert(ringBuffer *rb, const char *line) {
   pthread_mutex_lock(&rb->mutex);
   while (((rb->head + 1) & BUFFER_MASK) == rb->tail) {
     pthread_cond_wait(&rb->not_full, &rb->mutex); // Wait if buffer is full
@@ -31,7 +31,7 @@ void ring_buffer_insert(ring_buffer_t *rb, const char *line) {
 /**
  * Retrieve a line from the ring buffer
  */
-int ring_buffer_get(ring_buffer_t *rb, char *line) {
+int ring_buffer_get(ringBuffer *rb, char *line) {
   pthread_mutex_lock(&rb->mutex);
   while (rb->head == rb->tail) {
     pthread_cond_wait(&rb->not_empty, &rb->mutex); // Wait if buffer is empty

@@ -10,8 +10,8 @@ int main(int argc, char *argv[]) {
   Logger *logger = (Logger *)arena_alloc(&arena, sizeof(Logger));
   logger_init(logger, &opts);
 
-  ring_buffer_t *ring_buffer = arena_alloc(&arena, sizeof(ring_buffer));
-  init_ring_buffer(ring_buffer);
+  ringBuffer *ring_buffer = arena_alloc(&arena, sizeof(ring_buffer));
+  ring_buffer_init(ring_buffer);
 
   pthread_t client_thread, processor_thread;
 

@@ -6,16 +6,16 @@
 #include "../include/ring_buffer.h"
 
 typedef struct {
-  ring_buffer_t *rb;
+  ringBuffer *rb;
   Options *opts;
   Logger *logger;
 } TcpClientArgs;
 
 int8_t tcp_client_thread_init(TcpClientArgs *tcp_client_args,
-                              ring_buffer_t *ring_buffer, Options *opts,
+                              ringBuffer *ring_buffer, Options *opts,
                               Logger *logger);
 void *tcp_client_thread(void *arg);
 
-void lines_read(int sockfd, ring_buffer_t *rb);
+void lines_read(int sockfd, ringBuffer *rb);
 
 #endif // CLIENT_H
