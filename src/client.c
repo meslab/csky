@@ -15,9 +15,9 @@
  * @param logger Logger
  * @return int8_t 0 on success, -1 on failure
  */
-inline int8_t init_tcp_client_args(TcpClientArgs *tcp_client_args,
-                                   ring_buffer_t *ring_buffer, Options *opts,
-                                   Logger *logger) {
+inline int8_t tcp_client_thread_init(TcpClientArgs *tcp_client_args,
+                                     ringBuffer *ring_buffer, Options *opts,
+                                     Logger *logger) {
   if (!tcp_client_args) {
     return -1;
   }
@@ -38,14 +38,14 @@ void *tcp_client_thread(void *arg) {
   TcpClientArgs *args = (TcpClientArgs *)arg;
 
   Options *opts = args->opts;
-  ring_buffer_t *rb = args->rb;
+  ringBuffer *rb = args->rb;
   Logger *logger = args->logger;
 
   int sockfd;
   struct sockaddr_in server_addr;
 
   if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    log_error(logger, "Socket creation failed");
+    error_log(logger, "Socket creation failed");
     exit(EXIT_FAILURE);
   }
 
@@ -53,22 +53,22 @@ void *tcp_client_thread(void *arg) {
   server_addr.sin_port = htons(opts->tcp_port);
   inet_pton(AF_INET, opts->tcp_server, &server_addr.sin_addr);
 
-  log_info_formatted(logger, "Connecting to server %s:%d\n", opts->tcp_server,
+  info_log_formatted(logger, "Connecting to server %s:%d\n", opts->tcp_server,
                      opts->tcp_port);
 
   if (connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) ==
       -1) {
-    log_error(logger, "Connection failed");
+    error_log(logger, "Connection failed");
     close(sockfd);
     exit(EXIT_FAILURE);
   }
 
-  log_info_formatted(logger, "Connected to server %s:%d\n", opts->tcp_server,
+  info_log_formatted(logger, "Connected to server %s:%d\n", opts->tcp_server,
                      opts->tcp_port);
 
-  read_lines(sockfd, rb);
+  lines_read(sockfd, rb);
 
-  log_info(logger, "Server disconnected.");
+  info_log(logger, "Server disconnected.");
   close(sockfd);
   return NULL;
 }
@@ -79,7 +79,7 @@ void *tcp_client_thread(void *arg) {
  * @param sockfd Socket file descriptor
  * @param rb Ring buffer
  */
-void read_lines(int sockfd, ring_buffer_t *rb) {
+void lines_read(int sockfd, ringBuffer *rb) {
   char buffer[128 * 1024];        // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
   int line_pos = 0;

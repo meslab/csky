@@ -2,24 +2,24 @@
 
 int main(int argc, char *argv[]) {
   Options opts;
-  parse_arguments(argc, argv, &opts);
+  arguments_parse(argc, argv, &opts);
 
   MemoryArena arena;
   arena_init(&arena, 1024 * 1024);
 
   Logger *logger = (Logger *)arena_alloc(&arena, sizeof(Logger));
-  init_logger(logger, &opts);
+  logger_init(logger, &opts);
 
-  ring_buffer_t *ring_buffer = arena_alloc(&arena, sizeof(ring_buffer));
-  init_ring_buffer(ring_buffer);
+  ringBuffer *ring_buffer = arena_alloc(&arena, sizeof(ring_buffer));
+  ring_buffer_init(ring_buffer);
 
   pthread_t client_thread, processor_thread;
 
   TcpClientArgs *tcp_client_args =
       (TcpClientArgs *)arena_alloc(&arena, sizeof(TcpClientArgs));
 
-  if (init_tcp_client_args(tcp_client_args, ring_buffer, &opts, logger)) {
-    log_error(logger, "TcpClientArgs init failed.");
+  if (tcp_client_thread_init(tcp_client_args, ring_buffer, &opts, logger)) {
+    error_log(logger, "TcpClientArgs init failed.");
     return -1;
   }
   pthread_create(&client_thread, NULL, tcp_client_thread, tcp_client_args);
@@ -27,8 +27,9 @@ int main(int argc, char *argv[]) {
   ProcessorArgs *processor_args =
       (ProcessorArgs *)arena_alloc(&arena, sizeof(ProcessorArgs));
 
-  if (init_data_processor_args(processor_args, ring_buffer, &opts, logger)) {
-    log_error(logger, "ProcessorArgs init failed.");
+  if (data_processor_thread_args_init(processor_args, ring_buffer, &opts,
+                                      logger)) {
+    error_log(logger, "ProcessorArgs init failed.");
     return -1;
   }
 
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);
 
-  close_logger(logger);
+  logger_close(logger);
 
   arena_free(&arena);
 

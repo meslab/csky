@@ -6,12 +6,12 @@
 
 /**
  * @brief Parse the command line arguments
- * 
+ *
  * @param argc Number of arguments
  * @param argv Arguments
  * @param opts Options struct
  */
-void parse_arguments(int argc, char *argv[], Options *opts) {
+void arguments_parse(int argc, char *argv[], Options *opts) {
 
   opts->tcp_server = "172.22.132.124";
   opts->tcp_port = 30002;

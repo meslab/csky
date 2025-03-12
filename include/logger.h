@@ -1,12 +1,12 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#define LOG_MESSAGE_MAX_LENGTH 80
+#define MESSAGE_LOG_MAX_LENGTH 80
 
 #include "../include/arg_parser.h"
 #include <stdio.h>
 
-typedef enum { LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERROR } LogLevel;
+typedef enum { DEBUG, INFO, WARNING, ERROR } LogLevel;
 
 typedef struct {
   FILE *err_log;
@@ -14,17 +14,17 @@ typedef struct {
   LogLevel level;
 } Logger;
 
-int init_logger(Logger *logger, const Options *opts);
-void close_logger(Logger *Logger);
+int logger_init(Logger *logger, const Options *opts);
+void logger_close(Logger *Logger);
 
-void log_message(Logger *logger, const LogLevel level, const char *message);
+void message_log(Logger *logger, const LogLevel level, const char *message);
 
-void log_error(Logger *logger, const char *message);
-void log_info(Logger *logger, const char *message);
-void log_warning(Logger *logger, const char *message);
-void log_debug(Logger *logger, const char *message);
+void error_log(Logger *logger, const char *message);
+void info_log(Logger *logger, const char *message);
+void warning_log(Logger *logger, const char *message);
+void debug_log(Logger *logger, const char *message);
 
-void log_info_formatted(Logger *logger, const char *format, ...);
-void log_debug_formatted(Logger *logger, const char *format, ...);
+void info_log_formatted(Logger *logger, const char *format, ...);
+void debug_log_formatted(Logger *logger, const char *format, ...);
 
 #endif // LOGGER_H

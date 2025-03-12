@@ -6,16 +6,16 @@
 #include "../include/ring_buffer.h"
 
 typedef struct {
-  ring_buffer_t *rb;
+  ringBuffer *rb;
   Options *opts;
   Logger *logger;
 } ProcessorArgs;
 
-int8_t init_data_processor_args(ProcessorArgs *data_processor_args,
-                                ring_buffer_t *ring_buffer, Options *opts,
-                                Logger *logger);
+int8_t data_processor_thread_args_init(ProcessorArgs *data_processor_args,
+                                       ringBuffer *ring_buffer, Options *opts,
+                                       Logger *logger);
 
 void *data_processor_thread(void *arg);
-size_t strip_chars(char *str);
+size_t squitter_strip_chars(char *str);
 
 #endif // PROCESSOR_H
