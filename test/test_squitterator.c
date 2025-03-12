@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
   arguments_parse(argc, argv, &opts);
 
   Logger logger;
-  init_logger(&logger, &opts);
+  logger_init(&logger, &opts);
 
   // Example 26-character hex string (13 bytes)
   const char *hex_str_26 = "7890ABCDEF1234567890ABCDEF";

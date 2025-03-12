@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
   arena_init(&arena, 1024 * 1024);
 
   Logger *logger = (Logger *)arena_alloc(&arena, sizeof(Logger));
-  init_logger(logger, &opts);
+  logger_init(logger, &opts);
 
   ring_buffer_t *ring_buffer = arena_alloc(&arena, sizeof(ring_buffer));
   init_ring_buffer(ring_buffer);
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
   pthread_join(client_thread, NULL);
   pthread_join(processor_thread, NULL);
 
-  close_logger(logger);
+  logger_close(logger);
 
   arena_free(&arena);
 

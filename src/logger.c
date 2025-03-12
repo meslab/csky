@@ -72,7 +72,7 @@ void log_message(Logger *logger, const LogLevel level, const char *message) {
  * @param opts The options
  * @return int 0 on success, -1 on failure
  */
-int init_logger(Logger *logger, const Options *opts) {
+int logger_init(Logger *logger, const Options *opts) {
   logger->err_log = NULL;
   logger->out_log = NULL;
   logger->level = LOG_ERROR;
@@ -112,7 +112,7 @@ int init_logger(Logger *logger, const Options *opts) {
  *
  * @param logger The logger
  */
-void close_logger(Logger *logger) {
+void logger_close(Logger *logger) {
   if (logger->err_log)
     fclose(logger->err_log);
   if (logger->out_log)
