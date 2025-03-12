@@ -15,9 +15,9 @@
  * @param logger Logger
  * @return int8_t 0 on success, -1 on failure
  */
-inline int8_t init_tcp_client_args(TcpClientArgs *tcp_client_args,
-                                   ring_buffer_t *ring_buffer, Options *opts,
-                                   Logger *logger) {
+inline int8_t tcp_client_thread_init(TcpClientArgs *tcp_client_args,
+                                     ring_buffer_t *ring_buffer, Options *opts,
+                                     Logger *logger) {
   if (!tcp_client_args) {
     return -1;
   }
@@ -66,7 +66,7 @@ void *tcp_client_thread(void *arg) {
   log_info_formatted(logger, "Connected to server %s:%d\n", opts->tcp_server,
                      opts->tcp_port);
 
-  read_lines(sockfd, rb);
+  lines_read(sockfd, rb);
 
   log_info(logger, "Server disconnected.");
   close(sockfd);
@@ -79,7 +79,7 @@ void *tcp_client_thread(void *arg) {
  * @param sockfd Socket file descriptor
  * @param rb Ring buffer
  */
-void read_lines(int sockfd, ring_buffer_t *rb) {
+void lines_read(int sockfd, ring_buffer_t *rb) {
   char buffer[128 * 1024];        // Temporary buffer
   char line[MAX_LINE_LENGTH + 1]; // Stores extracted line
   int line_pos = 0;

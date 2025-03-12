@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
   TcpClientArgs *tcp_client_args =
       (TcpClientArgs *)arena_alloc(&arena, sizeof(TcpClientArgs));
 
-  if (init_tcp_client_args(tcp_client_args, ring_buffer, &opts, logger)) {
+  if (tcp_client_thread_init(tcp_client_args, ring_buffer, &opts, logger)) {
     log_error(logger, "TcpClientArgs init failed.");
     return -1;
   }
