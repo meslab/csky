@@ -44,7 +44,7 @@ void *data_processor_thread(void *arg) {
           logger, "Head: %2d, tail: %2d, entries: %2d", rb->head, rb->tail,
           rb->head < rb->tail ? rb->head - rb->tail + BUFFER_SIZE
                               : rb->head - rb->tail);
-      process_adsb(logger, line);
+      adsb_squitter_parse(logger, line);
     }
   }
   return NULL;

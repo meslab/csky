@@ -13,7 +13,7 @@ void hex_to_bytes(const char *hex_str, uint8_t *bytes, size_t len) {
 /// @brief Process the ADS-B hex string
 /// @param logger
 /// @param hex_str  The hex string to process
-void process_adsb(Logger *logger, const char *hex_str) {
+void adsb_squitter_parse(Logger *logger, const char *hex_str) {
   size_t len = strlen(hex_str);
 
   uint8_t short_message[7]; // Maximum size: 7 bytes (56 bits)
@@ -22,11 +22,11 @@ void process_adsb(Logger *logger, const char *hex_str) {
   switch (len) {
   case 26:
     hex_to_bytes(hex_str + 12, short_message, len / 2 - 6);
-    process_short_message(short_message, logger);
+    adsb_short_message_parse(short_message, logger);
     break;
   case 40:
     hex_to_bytes(hex_str + 12, full_message, len / 2 - 6);
-    process_ext_message(full_message, logger);
+    adsb_ext_message_parse(full_message, logger);
     break;
   default:
     log_error(logger, "Invalid hex string length\n");
@@ -37,8 +37,9 @@ void process_adsb(Logger *logger, const char *hex_str) {
 /// @brief Process an extended message
 /// @param full_message
 /// @param logger
-void process_ext_message(uint8_t full_message[ADSB_EXT_LEN], Logger *logger) {
-  adsb_ext_t msg_ext;
+void adsb_ext_message_parse(uint8_t full_message[ADSB_EXT_LEN],
+                            Logger *logger) {
+  adsbExtendedMessage msg_ext;
   msg_ext.header = (full_message[0] << 24) | (full_message[1] << 16) |
                    (full_message[2] << 8) | full_message[3];
   memcpy(msg_ext.data, full_message + 4, 7);
@@ -61,9 +62,9 @@ void process_ext_message(uint8_t full_message[ADSB_EXT_LEN], Logger *logger) {
 /// @brief Process a short message
 /// @param full_message
 /// @param logger
-void process_short_message(uint8_t full_message[ADSB_SHORT_LEN],
-                           Logger *logger) {
-  adsb_short_t msg_short;
+void adsb_short_message_parse(uint8_t full_message[ADSB_SHORT_LEN],
+                              Logger *logger) {
+  adsbShortMessage msg_short;
   msg_short.header = (full_message[0] << 24) | (full_message[1] << 16) |
                      (full_message[2] << 8) | full_message[3];
   memcpy(msg_short.parity, full_message + 4, 3);
