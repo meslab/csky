@@ -29,7 +29,7 @@ void adsb_squitter_parse(Logger *logger, const char *hex_str) {
     adsb_ext_message_parse(full_message, logger);
     break;
   default:
-    log_error(logger, "Invalid hex string length\n");
+    error_log(logger, "Invalid hex string length\n");
     break;
   }
 }
@@ -55,7 +55,7 @@ void adsb_ext_message_parse(uint8_t full_message[ADSB_EXT_LEN],
   snprintf(parity_str, sizeof(parity_str), "%02X %02X %02X", msg_ext.parity[0],
            msg_ext.parity[1], msg_ext.parity[2]);
 
-  log_info_formatted(logger, "\nHeader: 0x%08X\nData: %s\nParity: %s",
+  info_log_formatted(logger, "\nHeader: 0x%08X\nData: %s\nParity: %s",
                      msg_ext.header, data_str, parity_str);
 }
 
@@ -73,6 +73,6 @@ void adsb_short_message_parse(uint8_t full_message[ADSB_SHORT_LEN],
   snprintf(parity_str, sizeof(parity_str), "%02X %02X %02X",
            msg_short.parity[0], msg_short.parity[1], msg_short.parity[2]);
 
-  log_info_formatted(logger, "\nHeader: 0x%08X\nParity: %s", msg_short.header,
+  info_log_formatted(logger, "\nHeader: 0x%08X\nParity: %s", msg_short.header,
                      parity_str);
 }

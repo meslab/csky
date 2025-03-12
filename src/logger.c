@@ -14,11 +14,11 @@
  */
 const char *log_level_str(LogLevel level) {
   switch (level) {
-  case LOG_DEBUG:
+  case DEBUG:
     return "DEBUG";
-  case LOG_INFO:
+  case INFO:
     return "INFO";
-  case LOG_WARNING:
+  case WARNING:
     return "WARNING";
   default:
     return "ERROR";
@@ -33,12 +33,12 @@ const char *log_level_str(LogLevel level) {
  */
 LogLevel parse_log_level(const char *level_str) {
   if (strcmp(level_str, "DEBUG") == 0 || strcmp(level_str, "D") == 0)
-    return LOG_DEBUG;
+    return DEBUG;
   if (strcmp(level_str, "INFO") == 0 || strcmp(level_str, "I") == 0)
-    return LOG_INFO;
+    return INFO;
   if (strcmp(level_str, "WARNING") == 0 || strcmp(level_str, "W") == 0)
-    return LOG_WARNING;
-  return LOG_ERROR;
+    return WARNING;
+  return ERROR;
 }
 
 /**
@@ -48,13 +48,12 @@ LogLevel parse_log_level(const char *level_str) {
  * @param level The log level
  * @param message The message to log
  */
-void log_message(Logger *logger, const LogLevel level, const char *message) {
+void message_log(Logger *logger, const LogLevel level, const char *message) {
   if (level < logger->level)
     return;
 
-  FILE *dest = (level == LOG_ERROR)
-                   ? (logger->err_log ? logger->err_log : stderr)
-                   : (logger->out_log ? logger->out_log : stdout);
+  FILE *dest = (level == ERROR) ? (logger->err_log ? logger->err_log : stderr)
+                                : (logger->out_log ? logger->out_log : stdout);
 
   time_t now = time(NULL);
   struct tm *tm_info = localtime(&now);
@@ -75,7 +74,7 @@ void log_message(Logger *logger, const LogLevel level, const char *message) {
 int logger_init(Logger *logger, const Options *opts) {
   logger->err_log = NULL;
   logger->out_log = NULL;
-  logger->level = LOG_ERROR;
+  logger->level = ERROR;
 
   if (!opts)
     return -1; // Ensure opts is valid
@@ -123,61 +122,61 @@ void logger_close(Logger *logger) {
 /// @brief Log an error message
 /// @param logger  The logger
 /// @param message The message to log
-void log_error(Logger *logger, const char *message) {
-  log_message(logger, LOG_ERROR, message);
+void error_log(Logger *logger, const char *message) {
+  message_log(logger, ERROR, message);
 }
 
 /// @brief Log an info message
 /// @param logger  The logger
 /// @param message The message to log
-void log_info(Logger *logger, const char *message) {
-  log_message(logger, LOG_INFO, message);
+void info_log(Logger *logger, const char *message) {
+  message_log(logger, INFO, message);
 }
 
 /// @brief Log a warning message
 /// @param logger  The logger
 /// @param message The message to log
-void log_warning(Logger *logger, const char *message) {
-  log_message(logger, LOG_WARNING, message);
+void warning_log(Logger *logger, const char *message) {
+  message_log(logger, WARNING, message);
 }
 
 /// @brief Log a debug message
 /// @param logger  The logger
 /// @param message The message to log
-void log_debug(Logger *logger, const char *message) {
-  log_message(logger, LOG_DEBUG, message);
+void debug_log(Logger *logger, const char *message) {
+  message_log(logger, DEBUG, message);
 }
 
 /// @brief Log an info message with a formatted string
 /// @param logger The logger
 /// @param format The format string
 /// @param    ... The format arguments
-void log_info_formatted(Logger *logger, const char *format, ...) {
-  if (LOG_INFO < logger->level)
+void info_log_formatted(Logger *logger, const char *format, ...) {
+  if (INFO < logger->level)
     return;
 
-  char log_buffer[LOG_MESSAGE_MAX_LENGTH];
+  char log_buffer[MESSAGE_LOG_MAX_LENGTH];
   va_list args;
   va_start(args, format);
-  vsnprintf(log_buffer, LOG_MESSAGE_MAX_LENGTH, format, args);
+  vsnprintf(log_buffer, MESSAGE_LOG_MAX_LENGTH, format, args);
   va_end(args);
 
-  log_message(logger, LOG_INFO, log_buffer);
+  message_log(logger, INFO, log_buffer);
 }
 
 /// @brief Log a debug message with a formatted string
 /// @param logger The logger
 /// @param format The format string
 /// @param    ... The format arguments
-void log_debug_formatted(Logger *logger, const char *format, ...) {
-  if (LOG_DEBUG < logger->level)
+void debug_log_formatted(Logger *logger, const char *format, ...) {
+  if (DEBUG < logger->level)
     return;
 
-  char log_buffer[LOG_MESSAGE_MAX_LENGTH];
+  char log_buffer[MESSAGE_LOG_MAX_LENGTH];
   va_list args;
   va_start(args, format);
-  vsnprintf(log_buffer, LOG_MESSAGE_MAX_LENGTH, format, args);
+  vsnprintf(log_buffer, MESSAGE_LOG_MAX_LENGTH, format, args);
   va_end(args);
 
-  log_message(logger, LOG_DEBUG, log_buffer);
+  message_log(logger, DEBUG, log_buffer);
 }

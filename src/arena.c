@@ -49,6 +49,6 @@ void arena_free(MemoryArena *arena) {
 /// @param logger The logger to use for printing
 /// @param arena  The memory arena to print information about
 void arena_info(Logger *logger, MemoryArena *arena) {
-  log_info_formatted(logger, "Arena size: %ld, offset: %ld\n", arena->size,
+  info_log_formatted(logger, "Arena size: %ld, offset: %ld\n", arena->size,
                      arena->offset);
 }
