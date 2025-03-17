@@ -88,17 +88,19 @@ int logger_init(Logger *logger, const Options *opts) {
     if (!logger->err_log) {
       perror("Failed to open error log file");
       fprintf(stderr, "errno: %d, strerror: %s\n", errno, strerror(errno));
+      if (logger->err_log)
+        fclose(logger->err_log);
       return -1;
     }
   }
 
   if (opts->out_log) {
-    logger->err_log = fopen(opts->out_log, "a");
+    logger->out_log = fopen(opts->out_log, "a");
     if (!logger->out_log) {
       perror("Failed to open output log file");
       fprintf(stderr, "errno: %d, strerror: %s\n", errno, strerror(errno));
-      if (logger->err_log)
-        fclose(logger->err_log);
+      if (logger->out_log)
+        fclose(logger->out_log);
       return -1;
     }
   }
