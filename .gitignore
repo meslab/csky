@@ -1,5 +1,6 @@
 bin/
 lib/
+log/
 # Prerequisites
 *.d
 
@@ -43,6 +44,9 @@ lib/
 *.su
 *.idb
 *.pdb
+
+# Log files
+*.log
 
 # Kernel Module Compile Results
 *.mod*

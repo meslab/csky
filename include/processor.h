@@ -1,8 +1,8 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
+#include "../../crux/include/logger.h"
 #include "../include/arg_parser.h"
-#include "../include/logger.h"
 #include "../include/ring_buffer.h"
 
 typedef struct {

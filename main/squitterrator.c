@@ -1,49 +1,62 @@
-#include "../include/squitterrator.h"
+#include "../../crux/include/linear_arena.h"
+#include "../../crux/include/logger.h"
+#include "../../crux/include/utils.h"
+#include "../include/arg_parser.h"
+#include "../include/client.h"
+#include "../include/processor.h"
+#include "../include/ring_buffer.h"
 
 int main(int argc, char *argv[]) {
-  Options opts;
-  arguments_parse(argc, argv, &opts);
+	Options opts;
+	arguments_parse(argc, argv, &opts);
 
-  MemoryArena arena;
-  arena_init(&arena, 1024 * 1024);
+	LinearMemoryArena linear_arena;
+	linear_arena_init(&linear_arena, 1024 * 1024);
 
-  Logger *logger = (Logger *)arena_alloc(&arena, sizeof(Logger));
-  logger_init(logger, &opts);
+	LoggerOptions logger_options = {
+		.verbose = opts.verbose,
+		.log_level = opts.log_level,
+		.err_log = opts.err_log,
+		.out_log = opts.out_log	
+	};
 
-  ringBuffer *ring_buffer = arena_alloc(&arena, sizeof(ring_buffer));
-  ring_buffer_init(ring_buffer);
+	Logger *logger = (Logger *)linear_arena_alloc(&linear_arena, sizeof(Logger));
+	logger_init(logger, &logger_options);
 
-  pthread_t client_thread, processor_thread;
+	ringBuffer *ring_buffer = linear_arena_alloc(&linear_arena, sizeof(ring_buffer));
+	ring_buffer_init(ring_buffer);
 
-  TcpClientArgs *tcp_client_args =
-      (TcpClientArgs *)arena_alloc(&arena, sizeof(TcpClientArgs));
+	pthread_t client_thread, processor_thread;
 
-  if (tcp_client_thread_init(tcp_client_args, ring_buffer, &opts, logger)) {
-    error_log(logger, "TcpClientArgs init failed.");
-    return -1;
-  }
-  pthread_create(&client_thread, NULL, tcp_client_thread, tcp_client_args);
+	TcpClientArgs *tcp_client_args =
+		(TcpClientArgs *)linear_arena_alloc(&linear_arena, sizeof(TcpClientArgs));
 
-  ProcessorArgs *processor_args =
-      (ProcessorArgs *)arena_alloc(&arena, sizeof(ProcessorArgs));
+	if (tcp_client_thread_init(tcp_client_args, ring_buffer, &opts, logger)) {
+		error_log(logger, "TcpClientArgs init failed.");
+		return -1;
+	}
+	pthread_create(&client_thread, NULL, tcp_client_thread, tcp_client_args);
 
-  if (data_processor_thread_args_init(processor_args, ring_buffer, &opts,
-                                      logger)) {
-    error_log(logger, "ProcessorArgs init failed.");
-    return -1;
-  }
+	ProcessorArgs *processor_args =
+		(ProcessorArgs *)linear_arena_alloc(&linear_arena, sizeof(ProcessorArgs));
 
-  pthread_create(&processor_thread, NULL, data_processor_thread,
-                 processor_args);
+	if (data_processor_thread_args_init(processor_args, ring_buffer, &opts,
+				logger)) {
+		error_log(logger, "ProcessorArgs init failed.");
+		return -1;
+	}
 
-  arena_info(logger, &arena);
+	pthread_create(&processor_thread, NULL, data_processor_thread,
+			processor_args);
 
-  pthread_join(client_thread, NULL);
-  pthread_join(processor_thread, NULL);
+	linear_arena_info(logger, &linear_arena);
 
-  logger_close(logger);
+	pthread_join(client_thread, NULL);
+	pthread_join(processor_thread, NULL);
 
-  arena_free(&arena);
+	logger_close(logger);
 
-  return 0;
+	linear_arena_free(&linear_arena);
+
+	return 0;
 }
