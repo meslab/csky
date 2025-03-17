@@ -5,15 +5,15 @@ CFLAGS_DEBUG = -g
 LDFLAGS += -Wl,--gc-sections -flto
 
 BIN_DIR = bin
-MAIN_STATIC_BIN = $(BIN_DIR)/squiterrator_static
-MAIN_SHARED_BIN = $(BIN_DIR)/squiterrator_shared
+MAIN_STATIC_BIN = $(BIN_DIR)/csky_static
+MAIN_SHARED_BIN = $(BIN_DIR)/csky_shared
 MAIN_SRC = $(wildcard main/*.c)
 
 TEST_BIN_DIR = test/bin
 LIB_DIR = lib
 INCLUDE_DIR = include
 
-LIB_NAME = squiterrator
+LIB_NAME = csky
 STATIC_LIB = $(LIB_DIR)/lib$(LIB_NAME).a
 SHARED_LIB = $(LIB_DIR)/lib$(LIB_NAME).so
 
@@ -26,8 +26,8 @@ CRUX_SHARED_LIB = $(CRUX_LIB_DIR)/lib$(CRUX_LIB_NAME).so
 
 TEST_SRC = $(wildcard test/src/*.c)
 TEST_MAIN = $(wildcard test/*.c)
-TEST_STATIC_BIN = $(TEST_BIN_DIR)/test_squiterrator_static
-TEST_SHARED_BIN = $(TEST_BIN_DIR)/test_squiterrator_shared
+TEST_STATIC_BIN = $(TEST_BIN_DIR)/test_csky_static
+TEST_SHARED_BIN = $(TEST_BIN_DIR)/test_csky_shared
 
 # Gather all source files automatically
 SRC_FILES := $(wildcard src/*.c)
