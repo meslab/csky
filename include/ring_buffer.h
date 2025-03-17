@@ -8,12 +8,12 @@
 #define MAX_LINE_LENGTH 63            // Max length of a single line
 
 typedef struct {
-  char buffer[BUFFER_SIZE][MAX_LINE_LENGTH + 1]; // Extra byte for '\0'
-  unsigned int head;
-  unsigned int tail;
-  pthread_mutex_t mutex;
-  pthread_cond_t not_empty;
-  pthread_cond_t not_full;
+	char buffer[BUFFER_SIZE][MAX_LINE_LENGTH + 1]; // Extra byte for '\0'
+	unsigned int head;
+	unsigned int tail;
+	pthread_mutex_t mutex;
+	pthread_cond_t not_empty;
+	pthread_cond_t not_full;
 } ringBuffer;
 
 void ring_buffer_init(ringBuffer *rb);
