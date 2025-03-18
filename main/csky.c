@@ -49,7 +49,8 @@ int main(int argc, char *argv[]) {
 	pthread_create(&processor_thread, NULL, data_processor_thread,
 			processor_args);
 
-	linear_arena_info(logger, &linear_arena);
+	linear_arena_status_update(&linear_arena);
+	debug_log(logger, linear_arena.status);
 
 	pthread_join(client_thread, NULL);
 	pthread_join(processor_thread, NULL);
