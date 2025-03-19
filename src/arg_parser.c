@@ -46,12 +46,12 @@ void arguments_parse(int argc, char *argv[], Options *opts) {
 				break;
 			case 'o':
 				if (optarg) {
-					opts->out_log = optarg;
+					opts->out_log =  fopen(optarg, "a");
 				}
 				break;
 			case 'e':
 				if (optarg) {
-					opts->err_log = optarg;
+					opts->err_log = fopen(optarg, "a");
 				}
 				break;
 			case 'l':

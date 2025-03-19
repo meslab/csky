@@ -7,15 +7,8 @@ int main(int argc, char *argv[]) {
 	Options opts;
 	arguments_parse(argc, argv, &opts);
 
-	LoggerOptions logger_options = {
-		.verbose = opts.verbose,
-		.log_level = opts.log_level,
-		.err_log = opts.err_log,
-		.out_log = opts.out_log	
-	};
-
 	Logger logger;
-	logger_init(&logger, &logger_options);
+	logger_init(&logger, opts.err_log, opts.out_log, opts.log_level);
 
 	// Example 26-character hex string (13 bytes)
 	const char *hex_str_26 = "7890ABCDEF1234567890ABCDEF";
