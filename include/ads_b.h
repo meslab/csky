@@ -1,7 +1,7 @@
 #ifndef ADS_B_H
 #define ADS_B_H
 
-#include "../../crux/include/logger.h"
+#include "logger.h"
 
 #include <stdint.h>
 #include <stdio.h>
