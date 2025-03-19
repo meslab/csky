@@ -1,5 +1,5 @@
-#include "../include/arg_parser.h"
-#include "../../crux/include/utils.h"
+#include "arg_parser.h"
+#include "utils.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>

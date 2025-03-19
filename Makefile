@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -Wpedantic -fPIC -s
+CFLAGS = -Wall -Werror -Wextra -Wpedantic -fPIC -s -Iinclude -I../crux/include
 CFLAGS_RELEASE = -O2 -ffunction-sections -flto
 CFLAGS_DEBUG = -g
 LDFLAGS += -Wl,--gc-sections -flto

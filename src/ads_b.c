@@ -1,4 +1,4 @@
-#include "../include/ads_b.h"
+#include "ads_b.h"
 
 /// @brief Convert a hex string to a byte array
 /// @param hex_str

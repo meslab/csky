@@ -1,11 +1,11 @@
-#include "../../crux/include/logger.h"
-#include "../../crux/include/utils.h"
-#include "../include/processor.h"
-#include "../include/ads_b.h"
-#include "../include/ring_buffer.h"
+#include "ads_b.h"
+#include "logger.h"
+#include "processor.h"
+#include "ring_buffer.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
 
 /// @brief Initialize data processor arguments
 /// @param data_processor_args Data processor arguments

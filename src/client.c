@@ -1,5 +1,5 @@
-#include "../../crux/include/logger.h"
-#include "../include/client.h"
+#include "logger.h"
+#include "client.h"
 
 #include <arpa/inet.h>
 #include <stdio.h>

@@ -1,9 +1,9 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include "../../crux/include/logger.h"
-#include "../include/arg_parser.h"
-#include "../include/ring_buffer.h"
+#include "logger.h"
+#include "arg_parser.h"
+#include "ring_buffer.h"
 
 typedef struct {
 	ringBuffer *rb;
