@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 	linear_arena_init(&linear_arena, 1024 * 1024);
 
 	Logger *logger = (Logger *)linear_arena_alloc(&linear_arena, sizeof(Logger));
-	logger_init(logger, NULL, NULL, opts.log_level);
+	logger_init(logger, opts.err_log, opts.out_log, opts.log_level);
 
 	ringBuffer *ring_buffer = linear_arena_alloc(&linear_arena, sizeof(ring_buffer));
 	ring_buffer_init(ring_buffer);
