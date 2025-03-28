@@ -1,8 +1,8 @@
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra -Wpedantic -fPIC -s -Iinclude -I../crux/include
+CC = clang
+CFLAGS = -Wall -Werror -Wextra -Wpedantic -fPIC
 CFLAGS_RELEASE = -O2 -ffunction-sections -flto
 CFLAGS_DEBUG = -g
-LDFLAGS += -Wl,--gc-sections -flto
+LDFLAGS += -Wl,--gc-sections -flto -s
 
 BIN_DIR = bin
 MAIN_STATIC_BIN = $(BIN_DIR)/csky_static
@@ -24,7 +24,6 @@ CRUX_INCLUDE_DIR = $(CRUX_BASE_DIR)/include
 CRUX_STATIC_LIB = $(CRUX_LIB_DIR)/lib$(CRUX_LIB_NAME).a
 CRUX_SHARED_LIB = $(CRUX_LIB_DIR)/lib$(CRUX_LIB_NAME).so
 
-TEST_SRC = $(wildcard test/src/*.c)
 TEST_MAIN = $(wildcard test/*.c)
 TEST_STATIC_BIN = $(TEST_BIN_DIR)/test_csky_static
 TEST_SHARED_BIN = $(TEST_BIN_DIR)/test_csky_shared
@@ -43,19 +42,19 @@ $(STATIC_LIB): $(OBJ_FILES)
 # Compile each .c file into .o inside the lib directory
 $(LIB_DIR)/%.o: src/%.c
 	mkdir -p $(LIB_DIR) $(TEST_BIN_DIR) $(BIN_DIR) 
-	$(CC) $(CFLAGS) $(CFLAGS_RELEASE) -c $< -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(CFLAGS_RELEASE) -I$(INCLUDE_DIR) -I$(CRUX_INCLUDE_DIR) -c $< -o $@
 
 # Build shared library
 $(SHARED_LIB): $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(CFLAGS_RELEASE) -shared -o $(SHARED_LIB) $^
 
 # Test with static library
-test_static: $(STATIC_LIB) $(TEST_SRC)
-	$(CC) $(CFLAGS) $(CFLAGS_RELEASE) -I$(INCLUDE_DIR) -I$(CRUX_INCLUDE_DIR) $(TEST_SRC) $(TEST_MAIN) $(STATIC_LIB) $(CRUX_STATIC_LIB) -o $(TEST_STATIC_BIN)
+test_static: $(STATIC_LIB)
+	$(CC) $(CFLAGS) $(CFLAGS_RELEASE) -I$(INCLUDE_DIR) -I$(CRUX_INCLUDE_DIR) $(TEST_MAIN) $(STATIC_LIB) $(CRUX_STATIC_LIB) -o $(TEST_STATIC_BIN)
 
 # Test with shared library
-test_shared: $(SHARED_LIB) $(TEST_SRC)
-	$(CC) $(CFLAGS) $(CFLAGS_RELEASE) -I$(INCLUDE_DIR) -I$(CRUX_INCLUDE_DIR) $(TEST_SRC) $(TEST_MAIN) -L$(LIB_DIR) -l$(LIB_NAME) -L$(CRUX_LIB_DIR) -l$(CRUX_LIB_NAME) -o $(TEST_SHARED_BIN)
+test_shared: $(SHARED_LIB)
+	$(CC) $(CFLAGS) $(CFLAGS_RELEASE) -I$(INCLUDE_DIR) -I$(CRUX_INCLUDE_DIR) $(TEST_MAIN) -L$(LIB_DIR) -l$(LIB_NAME) -L$(CRUX_LIB_DIR) -l$(CRUX_LIB_NAME) -o $(TEST_SHARED_BIN)
 
 # Run tests
 run_test_static: test_static
