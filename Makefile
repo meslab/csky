@@ -53,7 +53,7 @@ RELEASE_OBJ_FILES := $(patsubst src/%.c, $(RELEASE_LIB_DIR)/%.o, $(SRC_FILES))
 DEBUG_OBJ_FILES := $(patsubst src/%.c, $(DEBUG_LIB_DIR)/%.o, $(SRC_FILES))
 
 # Targets
-all: release debug
+all: debug release
 
 release: $(STATIC_LIB_RELEASE) $(SHARED_LIB_RELEASE) test_release main_release
 
