@@ -1,0 +1,32 @@
+---
+Checks:          |
+  - '*'
+  - '-clang-analyzer-*'                # Disable static analyzer checks
+  - '-llvm-header-guard'                # Disable check for header guards, not needed for small projects
+  - '-hicpp-*'                          # Disable checks specific to C++ (if working in C)
+  - '-google-*'                         # Disable Google-specific checks
+  - '-modernize-*'                      # Disable modernize checks unless you specifically want them
+  - '-performance-*'                    # Performance checks can be too aggressive
+  - '-readability-*'                    # Some readability checks might be too strict for your style
+
+WarningsAsErrors: '*'
+HeaderFilterRegex: '.*'
+FormatStyle:    none
+CheckOptions:
+  - key:         modernize-use-nullptr.CheckPointerEquality
+    value:       0                    # Disable nullptr-related checks for Linux (older codebases)
+  - key:         readability-identifier-naming.FunctionCase
+    value:       'camelCase'          # For function naming in camelCase (adjust based on your style)
+  - key:         readability-identifier-naming.VariableCase
+    value:       'lower_case'         # For variable naming in lower_case (adjust as per your style)
+  - key:         readability-identifier-naming.ConstantCase
+    value:       'UPPER_CASE'         # For constant naming in UPPER_CASE
+  - key:         clang-analyzer-optin.performance.UninitializedArray
+    value:       'false'              # Disable false positives for uninitialized arrays
+
+# Disable the 'stdio.h' restriction for system libraries on Linux
+  - key:         llvmlibc-restrict-system-libc-headers
+    value:       'false'
+ExtraArgs: [-Iinclude]
+---
+
