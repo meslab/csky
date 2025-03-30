@@ -1,0 +1,4 @@
+IndentWidth: 8
+UseTab: Always
+BreakBeforeBraces: Attach
+ColumnLimit: 80

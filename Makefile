@@ -131,6 +131,9 @@ run_main_debug_static: main_debug
 run_main_debug_shared: main_debug
 	LD_LIBRARY_PATH=$(DEBUG_LIB_DIR):$(CRUX_DEBUG_LIB_DIR) ./$(MAIN_SHARED_BIN_DEBUG)
 
+format:
+	find . -type f \( -name "*.c" -o -name "*.h" \) -exec clang-format -i {} +
+
 # Clean build artifacts
 clean:
 	rm -rf $(LIB_DIR) $(TEST_BIN_DIR) $(BIN_DIR)

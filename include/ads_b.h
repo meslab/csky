@@ -27,6 +27,6 @@ void adsb_squitter_parse(Logger *logger, const char *hex_str);
 void adsb_ext_message_parse(uint8_t full_message[ADSB_EXT_LEN], Logger *logger);
 
 void adsb_short_message_parse(uint8_t full_message[ADSB_SHORT_LEN],
-		Logger *logger);
+			      Logger *logger);
 
 #endif // ADS_B_H

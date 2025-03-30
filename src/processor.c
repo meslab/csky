@@ -1,11 +1,11 @@
+#include "processor.h"
 #include "ads_b.h"
 #include "logger.h"
-#include "processor.h"
 #include "ring_buffer.h"
+#include "utils.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "utils.h"
 
 /// @brief Initialize data processor arguments
 /// @param data_processor_args Data processor arguments
@@ -15,8 +15,8 @@
 /// @return int8_t 0 on success, -1 on failure
 inline int8_t
 data_processor_thread_args_init(ProcessorArgs *data_processor_args,
-		ringBuffer *ring_buffer, Options *opts,
-		Logger *logger) {
+				ringBuffer *ring_buffer, Options *opts,
+				Logger *logger) {
 	if (!data_processor_args) {
 		return -1;
 	}
@@ -42,9 +42,11 @@ void *data_processor_thread(void *arg) {
 			squitter_strip_chars(line);
 			debug_log(logger, line);
 			debug_log_formatted(
-					logger, "Head: %2d, tail: %2d, entries: %2d", rb->head, rb->tail,
-					rb->head < rb->tail ? rb->head - rb->tail + BUFFER_SIZE
-					: rb->head - rb->tail);
+			    logger, "Head: %2d, tail: %2d, entries: %2d",
+			    rb->head, rb->tail,
+			    rb->head < rb->tail
+				? rb->head - rb->tail + BUFFER_SIZE
+				: rb->head - rb->tail);
 			adsb_squitter_parse(logger, line);
 		}
 	}
