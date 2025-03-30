@@ -53,7 +53,6 @@ int main(int argc, char *argv[]) {
 	pthread_join(processor_thread, NULL);
 
 	logger_close(logger);
-
 	linear_arena_free(&linear_arena);
 
 	return 0;
