@@ -8,9 +8,9 @@ LDFLAGS_DEBUG = -fsanitize=address,undefined
 BIN_DIR = bin
 DEBUG_BIN_DIR = $(BIN_DIR)/debug
 RELEASE_BIN_DIR = $(BIN_DIR)/release
-MAIN_STATIC_BIN_RELEASE = $(RELEASE_BIN_DIR)/csky_static
+MAIN_STATIC_BIN_RELEASE = $(RELEASE_BIN_DIR)/csky
 MAIN_SHARED_BIN_RELEASE = $(RELEASE_BIN_DIR)/csky_shared
-MAIN_STATIC_BIN_DEBUG = $(DEBUG_BIN_DIR)/csky_static
+MAIN_STATIC_BIN_DEBUG = $(DEBUG_BIN_DIR)/csky
 MAIN_SHARED_BIN_DEBUG = $(DEBUG_BIN_DIR)/csky_shared
 MAIN_SRC = $(wildcard main/*.c)
 
@@ -42,9 +42,9 @@ CRUX_SHARED_LIB_DEBUG = $(CRUX_DEBUG_LIB_DIR)/lib$(CRUX_LIB_NAME).so
 
 TEST_SRC = $(wildcard test/src/*.c)
 TEST_MAIN = $(wildcard test/*.c)
-TEST_STATIC_BIN_RELEASE = $(TEST_RELEASE_BIN_DIR)/test_csky_static
+TEST_STATIC_BIN_RELEASE = $(TEST_RELEASE_BIN_DIR)/test_csky
 TEST_SHARED_BIN_RELEASE = $(TEST_RELEASE_BIN_DIR)/test_csky_shared
-TEST_STATIC_BIN_DEBUG = $(TEST_DEBUG_BIN_DIR)/test_csky_static
+TEST_STATIC_BIN_DEBUG = $(TEST_DEBUG_BIN_DIR)/test_csky
 TEST_SHARED_BIN_DEBUG = $(TEST_DEBUG_BIN_DIR)/test_csky_shared
 
 # Gather all source files automatically
@@ -106,26 +106,26 @@ main_debug: $(STATIC_LIB_DEBUG) $(SHARED_LIB_DEBUG) $(MAIN_SRC)
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) -I$(INCLUDE_DIR) -I$(CRUX_INCLUDE_DIR) $(MAIN_SRC) -L$(DEBUG_LIB_DIR) -l$(LIB_NAME) -L$(CRUX_DEBUG_LIB_DIR) -l$(CRUX_LIB_NAME) -o $(MAIN_SHARED_BIN_DEBUG)
 
 # Run tests
-run_test_release_static: test_release
+run_test_release: test_release
 	$(TEST_STATIC_BIN_RELEASE)
 
 run_test_release_shared: test_release
 	LD_LIBRARY_PATH=$(RELEASE_LIB_DIR):$(CRUX_RELEASE_LIB_DIR) ./$(TEST_SHARED_BIN_RELEASE)
 
-run_test_debug_static: test_debug
+run_test_debug: test_debug
 	$(TEST_STATIC_BIN_DEBUG)
 
 run_test_debug_shared: test_debug
 	LD_LIBRARY_PATH=$(DEBUG_LIB_DIR):$(CRUX_DEBUG_LIB_DIR) ./$(TEST_SHARED_BIN_DEBUG)
 
 # Run main programs
-run_main_release_static: main_release
+run_main_release: main_release
 	$(MAIN_STATIC_BIN_RELEASE)
 
 run_main_release_shared: main_release
 	LD_LIBRARY_PATH=$(RELEASE_LIB_DIR):$(CRUX_RELEASE_LIB_DIR) ./$(MAIN_SHARED_BIN_RELEASE)
 
-run_main_debug_static: main_debug
+run_main_debug: main_debug
 	$(MAIN_STATIC_BIN_DEBUG)
 
 run_main_debug_shared: main_debug
@@ -139,5 +139,5 @@ clean:
 	rm -rf $(LIB_DIR) $(TEST_BIN_DIR) $(BIN_DIR)
 
 .PHONY: all release debug test_release test_debug main_release main_debug clean \
-        run_test_release_static run_test_release_shared run_test_debug_static run_test_debug_shared \
-        run_main_release_static run_main_release_shared run_main_debug_static run_main_debug_shared
+        run_test_release run_test_release_shared run_test_debug run_test_debug_shared \
+        run_main_release run_main_release_shared run_main_debug run_main_debug_shared
