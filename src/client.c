@@ -16,8 +16,8 @@
  * @return int8_t 0 on success, -1 on failure
  */
 inline int8_t tcp_client_thread_init(TcpClientArgs *tcp_client_args,
-				     ringBuffer *ring_buffer, Options *opts,
-				     Logger *logger) {
+		ringBuffer *ring_buffer, Options *opts,
+		Logger *logger) {
 	if (!tcp_client_args) {
 		return -1;
 	}
@@ -54,17 +54,17 @@ void *tcp_client_thread(void *arg) {
 	inet_pton(AF_INET, opts->tcp_server, &server_addr.sin_addr);
 
 	info_log_formatted(logger, "Connecting to server %s:%d\n",
-			   opts->tcp_server, opts->tcp_port);
+			opts->tcp_server, opts->tcp_port);
 
 	if (connect(sockfd, (struct sockaddr *)&server_addr,
-		    sizeof(server_addr)) == -1) {
+				sizeof(server_addr)) == -1) {
 		error_log(logger, "Connection failed");
 		close(sockfd);
 		exit(EXIT_FAILURE);
 	}
 
 	info_log_formatted(logger, "Connected to server %s:%d\n",
-			   opts->tcp_server, opts->tcp_port);
+			opts->tcp_server, opts->tcp_port);
 
 	lines_read(sockfd, rb);
 

@@ -19,7 +19,7 @@ void ring_buffer_insert(ringBuffer *rb, const char *line) {
 	pthread_mutex_lock(&rb->mutex);
 	while (((rb->head + 1) & BUFFER_MASK) == rb->tail) {
 		pthread_cond_wait(&rb->not_full,
-				  &rb->mutex); // Wait if buffer is full
+				&rb->mutex); // Wait if buffer is full
 	}
 	strncpy(rb->buffer[rb->head], line, MAX_LINE_LENGTH);
 	rb->buffer[rb->head][MAX_LINE_LENGTH] = '\0'; // Ensure null termination
@@ -35,7 +35,7 @@ int ring_buffer_get(ringBuffer *rb, char *line) {
 	pthread_mutex_lock(&rb->mutex);
 	while (rb->head == rb->tail) {
 		pthread_cond_wait(&rb->not_empty,
-				  &rb->mutex); // Wait if buffer is empty
+				&rb->mutex); // Wait if buffer is empty
 	}
 	strncpy(line, rb->buffer[rb->tail], MAX_LINE_LENGTH);
 	line[MAX_LINE_LENGTH] = '\0';
