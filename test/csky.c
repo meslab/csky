@@ -1,7 +1,8 @@
-#include "../../crux/include/logger.h"
-#include "../include/ads_b.h"
-#include "../include/arg_parser.h"
 #include <stdio.h>
+
+#include "ads_b.h"
+#include "arg_parser.h"
+#include "logger.h"
 
 int main(int argc, char *argv[]) {
 	Options opts;

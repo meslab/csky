@@ -27,6 +27,6 @@ CheckOptions:
 # Disable the 'stdio.h' restriction for system libraries on Linux
   - key:         llvmlibc-restrict-system-libc-headers
     value:       'false'
-ExtraArgs: [-Iinclude]
+ExtraArgs: [-Iinclude,-I../crux/include]
 ---
 
