@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches-ignore:
+      - "*"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Cactus repository
+        uses: actions/checkout@v4
+        with:
+          path: csky
+
+      - name: Checkout Crux repository as a sibling
+        uses: actions/checkout@v4
+        with:
+          repository: meslab/crux
+          path: crux
+
+      - name: Build Crux
+        run: make -C crux
+
+      - name: Build CSky
+        run: make -C csky
+
